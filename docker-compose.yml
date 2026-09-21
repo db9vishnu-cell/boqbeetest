@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: boqbee
+      POSTGRES_USER: boqbee
+      POSTGRES_PASSWORD: change-me-now
+    volumes:
+      - boqbee_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U boqbee -d boqbee"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgresql://boqbee:change-me-now@db:5432/boqbee
+      JWT_SECRET: change-this-to-a-long-random-secret
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backups:/app/backups
+
+volumes:
+  boqbee_db:

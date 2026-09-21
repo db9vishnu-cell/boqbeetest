@@ -1,0 +1,3013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOQBEE</title>
+<link rel="icon" type="image/png" href="boqbee-logo.png">
+<style>
+:root{--bg:#0e1117;--panel:#151a22;--panel2:#1b222d;--line:#2b3543;--text:#eef2f7;--muted:#9ca8b8;--accent:#6ea8fe;--accent2:#4f8df7;--danger:#ef6b73;--good:#57c58a}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{display:flex;min-height:100vh}.sidebar{width:245px;background:#0a0d12;border-right:1px solid var(--line);padding:18px 14px;position:fixed;top:0;bottom:0}
+.brand{font-size:18px;font-weight:700;padding:10px 12px 22px}.brand span{color:var(--accent)}
+.nav{display:grid;gap:6px}.nav button{border:0;background:transparent;color:var(--muted);padding:11px 12px;text-align:left;border-radius:8px}.nav button:hover,.nav button.active{background:#18202b;color:var(--text)}
+.main{margin-left:245px;flex:1;padding:28px;max-width:1500px}.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.topbar h1{margin:0;font-size:25px}.project-pill{color:var(--muted);font-size:13px}
+.view{display:none}.view.active{display:block}.grid{display:grid;gap:16px}.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}.card h3{margin:0 0 14px;font-size:16px}.metric{font-size:28px;font-weight:700}.muted{color:var(--muted)}.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}.toolbar-left,.toolbar-right{display:flex;gap:10px;align-items:center}
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:9px 13px;border-radius:8px}.btn.primary{background:var(--accent2);border-color:var(--accent2);color:#fff}.btn.danger{color:#ffadb2}.btn.small{padding:6px 9px;font-size:12px}
+input,select,textarea{width:100%;background:#0f141b;color:var(--text);border:1px solid var(--line);border-radius:7px;padding:9px}.field{display:grid;gap:6px}.field label{font-size:12px;color:var(--muted)}.form{display:grid;gap:12px}.formgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+table{width:100%;border-collapse:collapse}th,td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}th{color:var(--muted);font-weight:600}td.num,th.num{text-align:right}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#1c2633;color:#bcd4fb;font-size:11px}.badge.good{color:#a4ebc7;background:#13261e}
+.empty{padding:35px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:10px}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:50}.modal-backdrop.show{display:flex}
+.modal{width:min(860px,94vw);max-height:92vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px}.modal h2{margin:0 0 16px}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.room-tabs{display:flex;gap:7px;overflow:auto;margin-bottom:15px}.room-tab{white-space:nowrap}.room-tab.active{border-color:var(--accent2);background:#15294a}
+.summary{display:flex;justify-content:flex-end;gap:30px;padding-top:15px}.summary .total{font-size:24px;font-weight:700}
+.kpi-note{font-size:12px;color:var(--muted);margin-top:5px}.section-title{font-size:13px;color:var(--muted);margin:22px 0 8px}
+@media(max-width:1100px){.grid4{grid-template-columns:repeat(2,1fr)}.formgrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:750px){.sidebar{width:70px}.brand{font-size:0}.brand span{font-size:16px}.nav button{font-size:0;text-align:center}.main{margin-left:70px;padding:18px}.grid4,.grid2,.formgrid{grid-template-columns:1fr}}
+
+.quote-item-description{
+  display:block;
+  max-width:430px;
+  line-height:1.35;
+}
+.quote-item-description .desc-line1,
+.quote-item-description .desc-line2{display:block}
+.quote-material-tags{display:inline-flex;flex-wrap:wrap;gap:4px;margin-top:3px}
+.quote-material-tag{display:inline-block;padding:2px 6px;border:1px solid #b9d4be;border-radius:999px;background:#eef7f0;color:#2e6a3e;font-size:10px;font-weight:700;line-height:1.2}
+
+/* BOQ LIGHT GREEN THEME */
+:root{
+  --bg:#f5faf6;--panel:#ffffff;--panel2:#eef7f0;--line:#cfe1d3;
+  --text:#183222;--muted:#62766a;--accent:#3f8f58;--accent2:#2f7745;
+  --danger:#b94a52;--good:#3d8a59;
+}
+body{background:var(--bg);color:var(--text)}
+.sidebar{background:#e5f2e8;border-right:1px solid #c6ddcb}
+.brand{color:#1d5730}.brand span{color:#2f7745}
+.nav button{color:#57705f}.nav button:hover,.nav button.active{background:#cfe7d4;color:#174d29}
+.main{background:linear-gradient(180deg,#f7fbf8 0%,#f5faf6 100%)}
+.card{background:#fff;border-color:#cfe1d3}
+.btn{background:#f0f8f2;border-color:#bfd7c4;color:#174d29}
+.btn:hover{background:#e4f3e8}.btn.primary{background:#3f8f58;border-color:#3f8f58;color:#fff}
+input,select,textarea{background:#fff;color:#183222;border-color:#bfd5c4}
+input:focus,select:focus,textarea:focus{outline:2px solid #b9dbbf;border-color:#71a87d}
+.badge{background:#e1f0e4;color:#2e6a3e}
+.boqlite-header{background:linear-gradient(135deg,#eef9f1,#dcefe1);border-color:#bad8c1}
+.boqlite-title{color:#174d29}
+.quote-area-row td{background:#d7ebdc !important;color:#174d29 !important;border-top:2px solid #8fc09a !important}
+.quote-table thead th{background:#2f7745 !important;color:#fff !important}
+.quote-total-box{background:#e8f5eb;border-color:#bfd9c5}
+.company-logo-preview{width:92px;height:92px;border:1px dashed #a9c8b2;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#f4faf6;overflow:hidden;color:#6a8671;font-size:11px}.company-logo-preview img{max-width:100%;max-height:100%;object-fit:contain}
+.company-header-live-preview-v13{position:relative;width:100%;min-height:190px;height:220px;background:#fff;border:1px solid #cfdcd2;border-radius:10px;overflow:hidden;padding:18px 18px;box-shadow:inset 0 0 0 1px #f0f5f1}.company-header-live-preview-v13 .live-header{min-height:172px;height:calc(100% - 20px);display:flex;justify-content:space-between;align-items:center;gap:16px;font-family:Arial,Helvetica,sans-serif}.company-header-live-preview-v13 .live-company{width:48%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative}.company-header-live-preview-v13 .live-logo-wrap{display:flex;align-items:center;justify-content:center;line-height:0;transform:translate(var(--logo-x,0px),var(--logo-y,0px));transition:transform .08s linear}.company-header-live-preview-v13 .live-logo{display:block;object-fit:contain}.company-header-live-preview-v13 .live-logo-placeholder{display:flex;align-items:center;justify-content:center;background:#183f2a;color:#fff;border-radius:5px;font-weight:800;font-size:11px}.company-header-live-preview-v13 .live-name{font-size:14px;font-weight:800;line-height:1.05;color:#20352a;transform:translate(var(--name-x,0px),var(--name-y,0px));transition:transform .08s linear}.company-header-live-preview-v13 .live-title{width:52%;height:100%;display:flex;flex-direction:column;justify-content:center;text-align:right;box-sizing:border-box;padding:2px 0}.company-header-live-preview-v13 .live-title-main{font-size:20px;font-weight:800;color:#2f7745;letter-spacing:.2px;white-space:nowrap}.company-header-live-preview-v13 .live-title-sub{font-size:8px;color:#728078;margin-top:3px}.company-header-live-preview-v13 .live-rule{height:2px;background:#d5e4d8;position:absolute;left:18px;right:18px;bottom:14px}.header-position-panel-v13{background:#f6fbf7;border:1px solid #d4e5d7;border-radius:10px;padding:12px}
+
+.boq-project-search-wrap-v16{position:relative;min-width:360px;flex:1;max-width:620px}
+.boq-project-search-results-v16{position:absolute;left:0;right:0;top:100%;z-index:30;margin-top:4px;background:#fff;border:1px solid #bfd7c4;border-radius:9px;box-shadow:0 12px 24px rgba(31,83,44,.12);max-height:260px;overflow:auto;display:none}
+.boq-project-search-results-v16.show{display:block}
+.boq-project-search-result-v16{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #e3eee5;background:#fff;padding:9px 11px;color:#183222}
+.boq-project-search-result-v16:last-child{border-bottom:0}
+.boq-project-search-result-v16:hover{background:#eef8f0}
+.boq-project-search-result-v16 b{display:block;font-size:13px}
+.boq-project-search-result-v16 span{display:block;font-size:11px;color:#62766a;margin-top:2px}
+.boq-project-search-empty-v16{padding:12px;color:#62766a;font-size:12px}
+.boq-selected-project-v16{padding:9px 12px;border:1px solid #cfe1d3;background:#f7fbf8;border-radius:8px;min-width:240px;font-size:13px}
+.boq-custom-desc-note-v16{font-size:11px;color:#62766a;margin-top:5px}
+.boq-action-bar-v15{display:flex;justify-content:flex-end;gap:10px;align-items:center;margin:0 0 14px;padding:12px 14px;background:#eef8f0;border:1px solid #c8dfcd;border-radius:10px}
+.boq-action-bar-v15 .btn{min-width:108px}
+.user-toolbar-v15{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.user-admin-note-v15{margin-top:10px}
+
+/* V6 AUTH CSS */
+.auth-screen{position:fixed;inset:0;z-index:5000;background:#eaf6ed;display:flex;align-items:center;justify-content:center;padding:20px}
+.auth-box{width:min(440px,95vw);background:#fff;border:1px solid #c7ddcc;border-radius:18px;padding:28px;box-shadow:0 25px 70px rgba(27,73,40,.12)}
+.auth-brand{font-size:25px;font-weight:800;color:#174d29}
+.auth-brand span{color:#3f8f58}.auth-title{font-size:21px;font-weight:750;margin-top:20px}
+.auth-sub{font-size:13px;color:#66796d;margin:7px 0 20px}
+.session-user{font-size:12px;color:#55705d}.session-area{display:flex;gap:10px;align-items:center}
+.permission-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.permission-item{border:1px solid #cfe1d3;border-radius:8px;background:#f7fbf8;padding:10px}
+.permission-item label{display:flex;align-items:center;gap:8px;font-size:12px}
+.approval-box{background:#f3faf4;border:1px solid #c8dfcd;border-radius:10px;padding:13px}
+.approval-badge{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800}
+.approval-draft{background:#edf1f2;color:#59676d}.approval-awaiting{background:#fff3d1;color:#8a6519}
+.dashboard-approval-wrap{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.dashboard-approval-wrap .btn{margin:0}
+.approval-approved{background:#dff2e4;color:#2a7340}.approval-rejected{background:#fde4e5;color:#9a3a43}
+.lock-note{font-size:12px;color:#795d1c;background:#fff6df;border:1px solid #ecd9a3;border-radius:8px;padding:9px}
+
+.hardware-line{
+  display:grid;grid-template-columns:1.4fr 1fr 90px 110px 38px;gap:8px;align-items:end;
+  padding:10px;background:#f7fbf8;border:1px solid #d4e6d8;border-radius:8px;margin-top:8px;
+}
+.hardware-total{font-size:13px;font-weight:700;color:#285f38;text-align:right}
+@media(max-width:800px){.hardware-line{grid-template-columns:1fr 1fr}.hardware-line .hardware-delete{grid-column:auto}}
+
+/* V9 TEMPLATE QUOTATION */
+.boq-document-v9{
+  background:#fff;color:#263139;border:1px solid #dbe1e5;
+  max-width:960px;margin:0 auto;padding:28px 30px 18px;
+  font-family:Arial,Helvetica,sans-serif;
+}
+.doc-header-v9{display:flex;justify-content:space-between;align-items:stretch;gap:22px;min-height:var(--header-h,100px);height:var(--header-h,100px)}
+.doc-company-v9{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;flex:0 0 47%;height:100%;overflow:visible}
+.doc-logo-wrap-v9{display:flex;align-items:center;justify-content:center;flex:none;line-height:0;margin-bottom:0;transform:translate(var(--logo-x,0px),var(--logo-y,0px));transition:transform .08s linear}
+.template-logo{display:block;object-fit:contain}
+.template-logo-placeholder{border-radius:7px;background:#132235;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+.doc-company-name-v9{font-size:18px;font-weight:800;letter-spacing:.2px;color:#142a3b;line-height:1.08;transform:translate(var(--name-x,0px),var(--name-y,0px));transition:transform .08s linear}
+.doc-company-info-block-v9{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transform:translate(var(--details-x,0px),var(--details-y,0px));transition:transform .08s linear;max-width:100%}
+ .doc-company-details-v9{font-size:8.5px;color:#68747b;line-height:1.35;max-width:100%;margin-top:2px;white-space:normal}
+.doc-company-detail-v9{display:block;transform:translate(var(--dx,0px),var(--dy,0px));transition:transform .08s linear;max-width:100%}
+.doc-company-address-v9{white-space:pre-line}.doc-company-phone-v9,.doc-company-email-v9,.doc-company-gst-v9{white-space:nowrap}
+.live-detail-v13{display:block;transform:translate(var(--dx,0px),var(--dy,0px));transition:transform .08s linear;max-width:95%}.live-address-v13{white-space:pre-line}
+.live-company-info-block-v13{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;max-width:100%;transform:translate(var(--details-x,0px),var(--details-y,0px));transition:transform .08s linear}.live-details-v13{font-size:8px;line-height:1.35;color:#68747b;margin-top:3px;max-width:95%}
+.doc-title-v9{text-align:right;flex:1;align-self:stretch;display:flex;flex-direction:column;justify-content:center;align-items:flex-end;padding-top:2px;padding-bottom:2px;box-sizing:border-box}
+.doc-title-main-v9{font-size:25px;font-weight:800;color:#0d557d;letter-spacing:.3px;line-height:1.1;white-space:nowrap}
+.doc-title-sub-v9{font-size:10px;color:#65747e;margin-top:4px}
+
+/* Smart tight quotation header: content-driven height, no artificial vertical gaps. */
+.doc-header-v9{position:relative;display:block;min-height:var(--header-h,100px);height:var(--header-h,100px);overflow:visible}
+.doc-company-v9{position:absolute;left:0;top:0;width:47%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:0;box-sizing:border-box;overflow:visible}
+.doc-title-v9{position:absolute;right:0;top:0;width:53%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:flex-end;text-align:right;box-sizing:border-box;padding:0}
+.doc-logo-wrap-v9{flex:none;line-height:0;margin:0;transform:translate(var(--logo-x,0px),var(--logo-y,0px))}
+.doc-company-info-block-v9{margin:0;transform:translate(var(--details-x,0px),var(--details-y,0px));}
+.doc-company-details-v9{margin-top:1px}
+.doc-rule-v9{margin:5px 0 12px}
+.company-header-live-preview-v13 .live-header{position:relative;display:block;height:100%;min-height:0}
+.company-header-live-preview-v13 .live-company{position:absolute;left:0;top:0;width:48%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:0}
+.company-header-live-preview-v13 .live-title{position:absolute;right:0;top:0;width:52%;height:100%;display:flex;flex-direction:column;justify-content:center;text-align:right;box-sizing:border-box;padding:0}
+.company-header-live-preview-v13 .live-logo-wrap{margin:0}
+.live-company-info-block-v13{margin:0}
+.company-header-live-preview-v13 .live-rule{bottom:5px}
+.doc-rule-v9{height:2px;background:#d9e0e4;margin:5px 0 12px}
+.doc-info-grid-v9{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.doc-info-box-v9{background:#f8fafb;border:1px solid #e0e5e9;border-radius:7px;padding:11px 13px}
+.doc-box-title-v9{font-size:11px;font-weight:800;color:#0b5a84;border-bottom:1px solid #d5dee4;padding-bottom:6px;margin-bottom:7px}
+.doc-line-v9{display:grid;grid-template-columns:105px 1fr;gap:8px;font-size:10px;line-height:1.45}
+.doc-line-v9 span{color:#71808a}.doc-line-v9 b{color:#28333a}
+.doc-summary-v9{display:grid;grid-template-columns:repeat(4,1fr);background:#142237;color:#fff;border-radius:8px;margin:15px 0 17px;overflow:hidden}
+.doc-summary-v9>div{padding:11px 12px;border-right:1px solid rgba(255,255,255,.14)}
+.doc-summary-v9>div:last-child{border-right:0}
+.doc-summary-v9 span{display:block;font-size:9px;letter-spacing:.6px;color:#c4ced7}
+.doc-summary-v9 b{display:block;font-size:17px;margin-top:4px}
+.doc-summary-v9 .estimate-total-v9{background:#183e5b}
+.template-table-v9{width:100%;border-collapse:collapse;table-layout:fixed}
+.template-table-v9 th,.template-table-v9 td{font-size:9.5px}
+.template-colhead th{background:#eef2f5;color:#5d6c76;font-weight:800;padding:6px 5px;border-top:1px solid #d8dfe4;border-bottom:1px solid #c9d2d8;text-align:left}
+.template-section-row td{background:#eef2f5;color:#162634;font-size:11px;font-weight:800;padding:7px 7px;border-top:2px solid #0c6793;border-bottom:1px solid #d2dae0}
+.template-item-row td{padding:8px 5px;vertical-align:top;border-bottom:1px solid #e1e6ea;color:#303a40}
+.template-item-row td:nth-child(3),.template-item-row td:nth-child(4),.template-item-row td:nth-child(5),.template-item-row td:nth-child(6){text-align:right}
+.template-desc{font-size:9px;color:#64727a;line-height:1.25;margin-top:3px;height:22.5px;overflow:hidden}
+.template-desc span{display:block;white-space:nowrap;overflow:hidden;text-overflow:clip;height:11.25px}
+.template-spec{font-size:8px;color:#78909a;margin-top:3px}
+.template-hardware-row td{padding:5px 5px;background:#fbfcfc;border-bottom:1px dashed #e0e6e9;color:#58666d;font-size:8.5px}
+.template-hardware-row td:nth-child(3),.template-hardware-row td:nth-child(4),.template-hardware-row td:nth-child(5),.template-hardware-row td:nth-child(6){text-align:right}
+.template-room-subtotal td{padding:7px 5px;background:#f6f8f9;border-bottom:1px solid #cfd8de;color:#31404a;font-size:9px}
+.template-room-subtotal td:nth-child(6){text-align:right}
+.doc-empty-v9{text-align:center;padding:28px;color:#78858d}
+.doc-totals-v9{width:46%;margin:17px 0 0 auto}
+.totals-line-v9{display:flex;justify-content:space-between;padding:5px 0;font-size:10px;color:#4f5d65}
+.totals-grand-v9{display:flex;justify-content:space-between;padding:8px 0 5px;margin-top:4px;border-top:2px solid #1c2a35;border-bottom:2px solid #1c2a35;color:#0a638d;font-size:15px;font-weight:800}
+.doc-terms-v9{margin-top:17px;background:#f8fafb;border:1px solid #dfe5e8;border-radius:7px;padding:11px 13px;font-size:9px;color:#5b6870}
+.doc-terms-v9 b{color:#27343c;font-size:10px}
+.doc-terms-v9 ul{margin:6px 0 0 17px;padding:0}.doc-terms-v9 li{margin:4px 0}
+.doc-sign-grid-v9{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:18px;font-size:9px;color:#33414a}
+.sign-line-v9{height:1px;background:#aeb9bf;margin:18px 0 9px}
+.doc-sign-grid-v9>div:last-child{text-align:left}
+.doc-footer-v9{display:flex;justify-content:space-between;border-top:1px solid #e1e6e9;margin-top:28px;padding-top:8px;font-size:8px;color:#77858d}
+@media print{
+  .sidebar,.topbar,.btn{display:none!important}
+  .main{margin-left:0;padding:0;background:#fff}
+  .boq-document-v9{border:0;max-width:none;margin:0;padding:12mm 10mm 8mm;box-shadow:none}
+  .template-section-row td{break-after:avoid}
+  .template-item-row,.template-hardware-row,.template-room-subtotal{break-inside:avoid}
+}
+@media(max-width:800px){
+  .doc-header-v9{flex-direction:column}.doc-title-v9{text-align:left}
+  .doc-info-grid-v9,.doc-summary-v9,.doc-sign-grid-v9{grid-template-columns:1fr}
+  .doc-summary-v9>div{border-right:0;border-bottom:1px solid rgba(255,255,255,.14)}
+  .doc-summary-v9>div:last-child{border-bottom:0}
+  .doc-totals-v9{width:100%}
+}
+
+/* V13 PROJECT ACCOUNTS & PAYMENTS */
+.finance-dashboard-card-v13{margin-top:16px;background:#fff;border:1px solid #cfe1d3;border-radius:12px;padding:18px}
+.dashboard-finance-grid-v13{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.account-project-head-v13{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 14px;background:#f5faf6;border:1px solid #d7e7da;border-radius:10px;margin-bottom:14px}
+.account-summary-grid-v13{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.account-summary-grid-v13>div{background:#f8fbf9;border:1px solid #d8e6da;border-radius:9px;padding:12px}
+.account-summary-grid-v13 span{display:block;font-size:11px;color:#607267}.account-summary-grid-v13 b{display:block;font-size:18px;color:#174d29;margin-top:4px}.account-summary-grid-v13 small{display:block;font-size:10px;color:#7a8a80;margin-top:4px}
+.account-control-row-v13{display:flex;justify-content:space-between;gap:16px;align-items:end;margin-top:14px;padding-top:14px;border-top:1px solid #e1ebe3}
+.ledger-party-type-v13{display:flex;gap:8px;flex-wrap:wrap}.ledger-party-type-v13 .party-choice-v13{min-width:96px}.ledger-party-type-v13 .party-choice-v13.selected{background:var(--accent2);border-color:var(--accent2);color:#fff}
+@media(max-width:1200px){.dashboard-finance-grid-v13{grid-template-columns:repeat(2,minmax(0,1fr))}.account-summary-grid-v13{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:750px){.dashboard-finance-grid-v13,.account-summary-grid-v13{grid-template-columns:1fr}.account-control-row-v13,.account-project-head-v13{flex-direction:column;align-items:stretch}.account-control-row-v13 .toolbar-right{justify-content:flex-start;flex-wrap:wrap}}
+
+/* V10 DASHBOARD */
+.dashboard-grid-v10{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.dashboard-card-v10{background:#fff;border:1px solid #cfe1d3;border-radius:12px;padding:18px;min-height:118px}
+.dashboard-label-v10{font-size:12px;color:#607267;margin-bottom:8px;font-weight:650}
+.dashboard-value-v10{font-size:30px;font-weight:800;color:#174d29}
+.dashboard-note-v10{font-size:11px;color:#788a7e;margin-top:6px}
+.status-card-v10{margin-top:16px;background:#fff;border:1px solid #cfe1d3;border-radius:12px;padding:18px}
+.status-list-v10{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.status-item-v10{background:#f5faf6;border:1px solid #d7e7da;border-radius:9px;padding:11px 12px}
+.status-name-v10{font-size:12px;color:#53695a}
+.status-count-v10{font-size:20px;font-weight:800;color:#2f7745;margin-top:3px}
+@media(max-width:1050px){.dashboard-grid-v10{grid-template-columns:repeat(2,minmax(0,1fr))}.status-list-v10{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.dashboard-grid-v10,.status-list-v10{grid-template-columns:1fr}}
+
+/* V10 DASHBOARD CSS */
+.dashboard-grid-v10{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.dashboard-card-v10{background:#fff;border:1px solid #cfe1d3;border-radius:12px;padding:18px;min-height:118px}
+.dashboard-label-v10{font-size:12px;color:#607267;margin-bottom:8px;font-weight:650}
+.dashboard-value-v10{font-size:30px;font-weight:800;color:#174d29}
+.dashboard-note-v10{font-size:11px;color:#788a7e;margin-top:6px}
+.status-card-v10{margin-top:16px;background:#fff;border:1px solid #cfe1d3;border-radius:12px;padding:18px}
+.status-list-v10{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.status-item-v10{background:#f5faf6;border:1px solid #d7e7da;border-radius:9px;padding:11px 12px}
+.status-name-v10{font-size:12px;color:#53695a}
+.status-count-v10{font-size:20px;font-weight:800;color:#2f7745;margin-top:3px}
+@media(max-width:1050px){.dashboard-grid-v10{grid-template-columns:repeat(2,minmax(0,1fr))}.status-list-v10{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.dashboard-grid-v10,.status-list-v10{grid-template-columns:1fr}}
+
+/* V11 DASHBOARD PROJECT STATUS */
+.project-status-table-v11{width:100%;border-collapse:collapse}
+.project-status-table-v11 th,.project-status-table-v11 td{padding:11px 10px;border-bottom:1px solid #d9e7dc;text-align:left;font-size:12px}
+.project-status-table-v11 th{background:#eef7f0;color:#4d6656;font-weight:750}
+.project-status-badge-v11{display:inline-block;padding:5px 9px;border-radius:999px;background:#e1f0e4;color:#2e6a3e;font-size:11px;font-weight:700}
+.project-finance-cell-v13{font-weight:700;white-space:nowrap}
+.project-status-empty-v11{padding:25px;text-align:center;color:#718174;border:1px dashed #cfe1d3;border-radius:9px}
+
+.hardware-section-v11 td{background:#e3f0e6 !important;color:#174d29 !important}
+.hardware-total-row-v11 td{background:#f0f7f1 !important;color:#285f38 !important}
+
+/* V12 PRINT = SAME AS BOQ PREVIEW */
+
+html,body{
+  margin:0;
+  padding:0;
+}
+.boq-document-v9{
+  width:210mm;
+  min-height:297mm;
+  box-sizing:border-box;
+  margin:0 auto;
+}
+@media print{
+  *,*::before,*::after{
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+  html,body{
+    width:210mm;
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+  }
+  .sidebar,.topbar,.toolbar,.btn{
+    display:none !important;
+  }
+  .main{
+    margin-left:0 !important;
+    padding:0 !important;
+    max-width:none !important;
+    width:100% !important;
+    background:#fff !important;
+  }
+  .view{
+    display:none !important;
+  }
+  #quotation.view.active{
+    display:block !important;
+  }
+  #quotationScreen{
+    display:block !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+  .boq-document-v9{
+    display:block !important;
+    width:210mm !important;
+    min-height:297mm !important;
+    max-width:none !important;
+    margin:0 !important;
+    padding:28px 30px 18px !important;
+    border:1px solid #dbe1e5 !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    background:#fff !important;
+  }
+  .doc-header-v9,
+  .doc-info-grid-v9,
+  .doc-summary-v9,
+  .template-table-v9,
+  .doc-totals-v9,
+  .doc-terms-v9,
+  .doc-sign-grid-v9,
+  .doc-footer-v9{
+    font-family:Arial,Helvetica,sans-serif !important;
+  }
+  .template-section-row,
+  .template-colhead,
+  .template-item-row,
+  .template-hardware-row,
+  .template-room-subtotal{
+    break-inside:avoid !important;
+  }
+  .template-section-row{
+    break-after:avoid !important;
+  }
+}
+
+/* V13 EXACT PREVIEW/PRINT */
+@page { size: A4 portrait; margin: 0; }
+
+.boq-document-v9{
+  width:210mm !important;
+  min-height:297mm !important;
+  max-width:none !important;
+  margin:0 auto !important;
+  box-sizing:border-box !important;
+}
+
+@media print{
+  *,*::before,*::after{
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+
+  html,body{
+    width:210mm !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+  }
+
+  .sidebar,.topbar,.toolbar,.btn,
+  .view:not(#quotation){
+    display:none !important;
+  }
+
+  .main{
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+  }
+
+  #quotation{
+    display:block !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  #quotationScreen{
+    display:block !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  .boq-document-v9{
+    display:block !important;
+    width:210mm !important;
+    min-height:297mm !important;
+    max-width:none !important;
+    margin:0 !important;
+    padding:28px 30px 18px !important;
+    box-sizing:border-box !important;
+    border:1px solid #dbe1e5 !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    background:#fff !important;
+    overflow:visible !important;
+  }
+
+  .doc-header-v9,
+  .doc-info-grid-v9,
+  .doc-summary-v9,
+  .doc-terms-v9,
+  .doc-sign-grid-v9,
+  .doc-footer-v9{
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+
+  .template-table-v9{
+    width:100% !important;
+    table-layout:fixed !important;
+    border-collapse:collapse !important;
+  }
+
+  .template-section-row,
+  .template-colhead{
+    break-after:avoid !important;
+    page-break-after:avoid !important;
+  }
+
+  .template-item-row,
+  .template-hardware-row,
+  .template-room-subtotal{
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+}
+
+/* V13 AUTO SCALE PRINT ENGINE */
+@page{
+  size:auto;
+  margin:0;
+}
+
+/* Preview remains the same A4 reference sheet. */
+.boq-document-v9{
+  width:794px !important;
+  min-width:794px !important;
+  max-width:794px !important;
+  min-height:1123px !important;
+  box-sizing:border-box !important;
+  margin:0 auto !important;
+}
+
+@media print{
+  *,*::before,*::after{
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+
+  html,body{
+    margin:0 !important;
+    padding:0 !important;
+    width:100% !important;
+    background:#fff !important;
+  }
+
+  .sidebar,.topbar,.toolbar,.btn,
+  .view:not(#quotation){
+    display:none !important;
+  }
+
+  .app{
+    display:block !important;
+    width:100% !important;
+  }
+
+  .main{
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+  }
+
+  #quotation{
+    display:block !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+  }
+
+  #quotationScreen{
+    display:block !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:visible !important;
+  }
+
+  /*
+    The entire A4 design is kept at one fixed internal size (794px).
+    CSS zoom scales the COMPLETE document proportionally to the print
+    page width, so changing paper size does not reflow columns/fonts.
+  */
+  #quotationScreen .boq-document-v9{
+    display:block !important;
+    width:794px !important;
+    min-width:794px !important;
+    max-width:794px !important;
+    min-height:1123px !important;
+    height:auto !important;
+    margin:0 auto !important;
+    padding:28px 30px 18px !important;
+    box-sizing:border-box !important;
+    border:1px solid #dbe1e5 !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    background:#fff !important;
+
+    /* 794px = A4 width at 96 CSS DPI. Scale against selected print viewport. */
+    zoom:calc(100vw / 794px);
+    transform-origin:top left !important;
+  }
+
+  .doc-header-v9,
+  .doc-info-grid-v9,
+  .doc-summary-v9,
+  .doc-terms-v9,
+  .doc-sign-grid-v9,
+  .doc-footer-v9{
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+
+  .template-table-v9{
+    width:100% !important;
+    table-layout:fixed !important;
+    border-collapse:collapse !important;
+  }
+
+  .template-section-row,
+  .template-colhead{
+    break-after:avoid !important;
+    page-break-after:avoid !important;
+  }
+
+  .template-item-row,
+  .template-hardware-row,
+  .template-room-subtotal{
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+}
+
+/* V14 BOQ PROJECT SELECTOR */
+.boq-project-bar-v14{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  background:#eef8f0;border:1px solid #c8dfcd;border-radius:10px;padding:12px 14px;
+  margin-bottom:14px;
+}
+.boq-project-select-v14{display:flex;align-items:center;gap:9px;min-width:340px}
+.boq-project-select-v14 label{font-size:12px;font-weight:700;color:#365c40;white-space:nowrap}
+.boq-project-select-v14 select{min-width:260px}
+@media(max-width:700px){
+  .boq-project-bar-v14{align-items:stretch;flex-direction:column}
+  .boq-project-select-v14{min-width:0}
+  .boq-project-select-v14 select{min-width:0}
+}
+
+/* FINAL QUOTATION-THEME UI HARMONIZATION */
+:root{
+  --bg:#f5faf6;--panel:#ffffff;--panel2:#eef7f0;--line:#cfe1d3;
+  --text:#183222;--muted:#62766a;--accent:#3f8f58;--accent2:#2f7745;
+  --danger:#b94a52;--good:#3d8a59;
+  --quote-deep:#174d29;--quote-primary:#2f7745;--quote-mid:#3f8f58;
+  --quote-soft:#eef7f0;--quote-pale:#f7fbf8;--quote-line:#cfe1d3;
+}
+.sidebar{background:#e5f2e8;border-right-color:#c6ddcb}
+.nav button{color:#57705f}.nav button:hover,.nav button.active{background:#cfe7d4;color:#174d29}
+.brand{color:#1d5730}.brand span{color:#2f7745}
+.btn{background:#f0f8f2;border-color:#bfd7c4;color:#174d29;box-shadow:none}
+.btn:hover{background:#e4f3e8;border-color:#bad8c1}.btn.primary{background:#2f7745;border-color:#2f7745;color:#fff}.btn.primary:hover{background:#25663a;border-color:#25663a}
+input,select,textarea{background:#fff;color:#183222;border-color:#bfd5c4}
+input:focus,select:focus,textarea:focus{outline:2px solid #b9dbbf;border-color:#71a87d}
+.room-tab.active{border-color:#3f8f58;background:#dff0e3;color:#174d29}
+.badge{background:#e1f0e4;color:#2e6a3e}.badge.good{color:#2e6a3e;background:#e1f0e4}
+
+/* Quotation colors aligned to the same light-green visual language. */
+.boq-document-v9{background:#fff;color:#183222;border-color:#cfe1d3}
+.doc-title-main-v9{color:#2f7745}
+.doc-title-sub-v9{color:#62766a}
+.doc-rule-v9{background:#cfe1d3}
+.doc-info-box-v9{background:#f7fbf8;border-color:#cfe1d3}
+.doc-box-title-v9{color:#2f7745;border-bottom-color:#d7e7da}
+.doc-line-v9 span{color:#62766a}.doc-line-v9 b{color:#183222}
+.doc-summary-v9{background:#174d29;color:#fff}
+.doc-summary-v9>div{border-right-color:rgba(255,255,255,.16)}
+.doc-summary-v9 span{color:#dcefe1}
+.doc-summary-v9 .estimate-total-v9{background:#2f7745}
+.template-colhead th{background:#eef7f0;color:#365c40;border-top-color:#d7e7da;border-bottom-color:#cfe1d3}
+.template-section-row td{background:#eef7f0;color:#174d29;border-top-color:#3f8f58;border-bottom-color:#cfe1d3}
+.template-item-row td{border-bottom-color:#dfece2;color:#303a40}
+.template-hardware-row td{background:#f7fbf8;border-bottom-color:#d8e6da;color:#4f6656}
+.template-room-subtotal td{background:#f0f7f1;border-bottom-color:#cfe1d3;color:#314b38}
+.doc-totals-v9 .totals-line-v9{color:#4f6656}
+.totals-grand-v9{border-top-color:#3f8f58;border-bottom-color:#3f8f58;color:#2f7745}
+.doc-terms-v9{background:#f7fbf8;border-color:#dfece2;color:#50675a}
+.doc-terms-v9 b{color:#174d29}
+.sign-line-v9{background:#a9c8b2}
+.doc-sign-grid-v9{color:#3d5546}.doc-footer-v9{border-top-color:#d8e6da;color:#62766a}
+.template-logo-placeholder{background:#174d29;color:#fff}
+.quote-material-tag{border-color:#b9d4be;background:#eef7f0;color:#2e6a3e}
+.quote-total-box{background:#e8f5eb;border-color:#bfd9c5}
+
+/* Keep form panels and status surfaces inside the same green theme. */
+.status-card-v10,.finance-dashboard-card-v13,.dashboard-card-v10,.card,.modal{background:#fff;border-color:#cfe1d3}
+.status-item-v10,.account-summary-grid-v13>div,.permission-item{background:#f7fbf8;border-color:#d7e7da}
+.approval-box{background:#f3faf4;border-color:#c8dfcd}
+
+/* BOQBEE logo branding */
+.auth-brand{display:flex;align-items:center;justify-content:center;width:100%;height:auto;margin-bottom:6px}
+.auth-brand img{display:block;width:min(250px,78vw);height:auto;max-height:145px;object-fit:contain}
+.sidebar .brand{display:flex;align-items:center;justify-content:center;height:74px;padding:8px 10px 16px;box-sizing:border-box}
+.sidebar .brand img{display:block;width:132px;max-width:100%;height:auto;max-height:60px;object-fit:contain}
+@media(max-width:750px){.sidebar .brand{height:64px;padding:8px 6px}.sidebar .brand img{width:52px;max-height:48px}.auth-brand img{width:min(220px,72vw)}}
+
+
+/* BOQBEE V1.2 — DEEP NAVY + AQUA BLUE INTERFACE THEME */
+:root{
+  --bg:#06111d;
+  --panel:#0d2338;
+  --panel2:#143651;
+  --line:#255a78;
+  --text:#edf9ff;
+  --muted:#9dbdd2;
+  --accent:#6edbff;
+  --accent2:#1f9ed7;
+  --danger:#ff7585;
+  --good:#55d6a0;
+}
+body{background:linear-gradient(180deg,#06111d 0%,#0b1f31 100%);color:var(--text)}
+.sidebar{background:#04101a;border-right:1px solid #1e4d69;box-shadow:8px 0 24px rgba(0,0,0,.28)}
+.brand{color:#f2fbff}.brand span{color:#6edbff}
+.nav button{color:#93b6cb}
+.nav button:hover,.nav button.active{background:#123b57;color:#f6fcff;box-shadow:inset 3px 0 0 #61d2fb}
+.main{background:linear-gradient(180deg,#071624 0%,#0a2033 100%)}
+.card{background:#0d253b;border-color:#255a78;box-shadow:0 10px 28px rgba(0,0,0,.2)}
+.card h3{color:#f3fbff}
+.btn{background:#12344f;border-color:#2b6685;color:#eaf7ff}
+.btn:hover{background:#184862;border-color:#4d8daa}
+.btn.primary{background:#1f9ed7;border-color:#1f9ed7;color:#fff;box-shadow:0 5px 14px rgba(31,158,215,.25)}
+.btn.primary:hover{background:#3ab2e8;border-color:#3ab2e8}
+input,select,textarea{background:#091b2b;color:#edf9ff;border-color:#285a78}
+input::placeholder,textarea::placeholder{color:#7596ab}
+input:focus,select:focus,textarea:focus{outline:2px solid rgba(110,219,255,.22);border-color:#61d2fb;background:#0c2439}
+.field label,.muted,.kpi-note,.section-title,.project-pill{color:#9dbdd2}
+table th{color:#9dbdd2}
+table td{border-color:#22506b}
+.badge{background:#153d5a;color:#bfeaff}
+.badge.good{background:#103d34;color:#8fe9c3}
+.empty{border-color:#285a78;color:#8eacbf;background:#0b2135}
+.modal-backdrop{background:rgba(2,8,14,.8)}
+.modal{background:#0d2338;border-color:#285a78;box-shadow:0 18px 55px rgba(0,0,0,.44)}
+.room-tab.active{border-color:#56c8f1;background:#164c6d;color:#fff}
+.summary{color:#eaf8ff}
+/* Dashboard / cards / finance */
+.dashboard-card-v10,.status-card-v10,.finance-dashboard-card-v13{background:#10253c;border-color:#294b6d;color:#edf7ff;box-shadow:0 10px 26px rgba(0,0,0,.12)}
+.dashboard-label-v10,.dashboard-note-v10,.status-name-v10,.account-summary-grid-v13 span,.account-summary-grid-v13 small,.ledger-party-type-v13,.user-admin-note-v15{color:#9fb8d0}
+.dashboard-value-v10,.status-count-v10,.account-summary-grid-v13 b{color:#8fd0ff}
+.status-item-v10{background:#112b44;border-color:#2b4e6f}
+.account-project-head-v13{background:#122a43;border-color:#2b4e6f}
+.account-summary-grid-v13>div{background:#0f2339;border-color:#294a69}
+.account-control-row-v13{border-color:#294765}
+
+/* Project search */
+.boq-project-search-results-v16{background:#102238;border-color:#2e5578;box-shadow:0 14px 28px rgba(0,0,0,.28)}
+.boq-project-search-result-v16{background:#102238;color:#eaf5ff;border-color:#23435f}
+.boq-project-search-result-v16:hover{background:#173a5c}
+.boq-project-search-result-v16 span,.boq-project-search-empty-v16{color:#9fb8d0}
+.boq-selected-project-v16{background:#122b45;border-color:#2d5577}
+.boq-action-bar-v15{background:#112b44;border-color:#2b4f70}
+
+/* Masters and forms */
+.hardware-line,.permission-item,.approval-box,.header-position-panel-v13{background:#112a42;border-color:#2b4f70}
+.hardware-total{color:#8fd0ff}
+.approval-draft{background:#203142;color:#b8c8d7}
+.approval-awaiting{background:#4a3a1a;color:#f1d28a}
+.approval-approved{background:#123b35;color:#8be1bd}
+.approval-rejected{background:#47222a;color:#ffb0b7}
+.lock-note{background:#433719;border-color:#6e5a26;color:#f0d79b}
+
+/* Authentication */
+.auth-screen{background:radial-gradient(circle at top,#0e2942 0%,#081525 62%,#050d17 100%)}
+.auth-box{background:#102238;border-color:#2b4f70;box-shadow:0 25px 70px rgba(0,0,0,.4)}
+.auth-brand{color:#eef7ff}.auth-brand span{color:#8fd0ff}.auth-sub{color:#9fb8d0}.session-user{color:#9fb8d0}
+
+/* Quotation / print accent — white paper with dark + light blue branding */
+.boqlite-header{background:linear-gradient(135deg,#eaf6ff,#d8ecfb);border-color:#b9d5ea}
+.boqlite-title{color:#0f5f91}
+.quote-area-row td{background:#dbeefd !important;color:#123f60 !important;border-top:2px solid #6faeda !important}
+.quote-table thead th{background:#174d73 !important;color:#fff !important}
+.quote-total-box{background:#e7f4ff;border-color:#bcd8eb}
+.quote-material-tag{border-color:#a8cde8;background:#edf7ff;color:#1f6d9e}
+.company-logo-preview{border-color:#9bc4df;background:#eef7ff;color:#5a7c96}
+.company-header-live-preview-v13{border-color:#b8d2e6;box-shadow:inset 0 0 0 1px #e7f3fb}
+.company-header-live-preview-v13 .live-logo-placeholder{background:#123c5c}
+.company-header-live-preview-v13 .live-name{color:#173c5b}
+.company-header-live-preview-v13 .live-title-main{color:#0d5b8b}
+.company-header-live-preview-v13 .live-title-sub{color:#6a7d8b}
+.company-header-live-preview-v13 .live-rule{background:#c4d9e8}
+
+/* Quotation document paper */
+.boq-document-v9{border-color:#cad9e5}
+.doc-title-main-v9{color:#0d5b8b}
+.doc-title-sub-v9{color:#657b8b}
+.doc-company-name-v9{color:#173c5b}
+.doc-company-details-v9{color:#687d8d}
+.doc-rule-v9{background:#bfd4e4}
+.doc-info-box-v9{background:#f6fafd;border-color:#d5e1e9}
+.doc-box-title-v9{color:#0d5b8b;border-color:#cfdee8}
+.doc-summary-v9{background:#142a43}
+.doc-summary-v9 .estimate-total-v9{background:#174d73}
+.template-colhead th{background:#edf5fa;color:#526d82;border-color:#cfdee8}
+.template-section-row td{background:#edf5fa;color:#16364f;border-top-color:#0d6797;border-bottom-color:#cfdee8}
+.template-item-row td{border-color:#dbe5ec;color:#31414e}
+.template-desc{color:#647987}
+.template-spec{color:#7891a2}
+.template-hardware-row td{background:#fafcfe;border-color:#dce6ed;color:#586c79}
+.template-room-subtotal td{background:#f1f6fa;border-color:#d4e0e8;color:#304a5d}
+.doc-terms-v9{background:#f7fafc;border-color:#d8e3ea;color:#5b6d79}
+.doc-terms-v9 b{color:#27465b}
+.doc-sign-grid-v9{color:#334a5a}.doc-footer-v9{border-color:#dce5eb;color:#778a96}
+
+/* Keep key controls visibly blue */
+select option{background:#102238;color:#eef7ff}
+hr{border-color:#294b6d}
+
+
+/* BOQBEE V1.2 — DEEP NAVY + AQUA BLUE refinement */
+.boq-commercial-panel-v17{background:#0f2a40 !important;border-color:#2a6b8f !important}
+.boq-commercial-live-v17{margin-top:10px;padding:9px 12px;border:1px solid #2f7ea7;border-radius:8px;background:#081b2b;color:#9fddf7;font-size:12px}
+.boq-commercial-live-v17 b{color:#effbff}
+
+
+/* Final blue-theme harmonization */
+.dashboard-card-v10,.status-card-v10,.finance-dashboard-card-v13{background:#0e2941;border-color:#285f7d;color:#effaff}
+.dashboard-label-v10,.dashboard-note-v10,.status-name-v10,.account-summary-grid-v13 span,.account-summary-grid-v13 small,.ledger-party-type-v13,.user-admin-note-v15{color:#9dbdd2}
+.dashboard-value-v10,.status-count-v10,.account-summary-grid-v13 b{color:#6edbff}
+.status-item-v10{background:#102d47;border-color:#2a607f}
+.account-project-head-v13{background:#12304b;border-color:#2b6180}
+.account-summary-grid-v13>div{background:#0c2237;border-color:#285b78}
+.account-control-row-v13{border-color:#285873}
+.boq-project-search-results-v16{background:#0d2338;border-color:#2b6685;box-shadow:0 14px 28px rgba(0,0,0,.3)}
+.boq-project-search-result-v16{background:#0d2338;color:#eaf8ff;border-color:#244e6b}
+.boq-project-search-result-v16:hover{background:#12405f}
+.boq-project-search-result-v16 span,.boq-project-search-empty-v16{color:#9dbdd2}
+.boq-selected-project-v16{background:#123550;border-color:#2a6685}
+.boq-action-bar-v15{background:#102f49;border-color:#2b6280}
+.hardware-line,.permission-item,.approval-box,.header-position-panel-v13{background:#102e47;border-color:#2a607e}
+.hardware-total{color:#6edbff}
+.approval-draft{background:#203542;color:#bfd0dc}
+.approval-awaiting{background:#4a3c1a;color:#f3d993}
+.approval-approved{background:#123f36;color:#8fe9c3}
+.approval-rejected{background:#47232b;color:#ffb0b7}
+.lock-note{background:#433719;border-color:#6e5a26;color:#f0d79b}
+.auth-screen{background:radial-gradient(circle at top,#0c2e47 0%,#061523 62%,#020910 100%)}
+.auth-box{background:#0d2338;border-color:#285b79;box-shadow:0 25px 70px rgba(0,0,0,.45)}
+.auth-brand{color:#effaff}.auth-brand span{color:#6edbff}.auth-sub{color:#9dbdd2}.session-user{color:#9dbdd2}
+
+/* BOQBEE V1.3 — remove legacy white/green UI patches */
+.boq-inline-panel-v17,
+.settings-inline-panel-v17{
+  background:#102e47 !important;
+  border:1px solid #2a607e !important;
+  color:#edf9ff;
+}
+.settings-inline-panel-v17 .kpi-note,
+.boq-inline-panel-v17 .kpi-note{color:#9dbdd2}
+.settings-inline-panel-v17 .field label,
+.boq-inline-panel-v17 .field label{color:#9dbdd2}
+.settings-inline-panel-v17 input,
+.settings-inline-panel-v17 select,
+.settings-inline-panel-v17 textarea{
+  background:#091b2b !important;
+  color:#edf9ff !important;
+  border-color:#285a78 !important;
+}
+.settings-inline-panel-v17 input:focus,
+.settings-inline-panel-v17 select:focus,
+.settings-inline-panel-v17 textarea:focus{
+  background:#0c2439 !important;
+}
+.boq-document-v9 input,
+.boq-document-v9 select,
+.boq-document-v9 textarea{background:#091b2b;color:#edf9ff;border-color:#285a78}
+.boq-document-v9 .card{background:#102e47;border-color:#2a607e}
+@media (max-width:900px){
+  .boq-inline-panel-v17 .formgrid,.settings-inline-panel-v17 .formgrid{grid-template-columns:1fr 1fr;}
+}
+
+/* BOQBEE V1.4 — Yellow logo + remove remaining green BOQ Builder project patches */
+.auth-brand img,.sidebar .brand img{
+  filter: brightness(0) saturate(100%) invert(84%) sepia(98%) saturate(1100%) hue-rotate(354deg) brightness(103%) contrast(102%);
+}
+/* Force BOQ Builder project area fully into the blue theme */
+.boq-project-bar-v14{
+  background:#102f49 !important;
+  border-color:#2b6280 !important;
+  color:#edf9ff !important;
+}
+.boq-project-select-v14 label{
+  color:#9dbdd2 !important;
+}
+.boq-project-search-wrap-v16 input{
+  background:#091b2b !important;
+  color:#edf9ff !important;
+  border-color:#285a78 !important;
+}
+.boq-project-search-wrap-v16 input::placeholder{color:#7596ab !important}
+.boq-project-search-results-v16{
+  background:#0d2338 !important;
+  border-color:#2b6685 !important;
+  box-shadow:0 14px 28px rgba(0,0,0,.30) !important;
+}
+.boq-project-search-result-v16{
+  background:#0d2338 !important;
+  color:#eaf8ff !important;
+  border-color:#244e6b !important;
+}
+.boq-project-search-result-v16:hover{background:#12405f !important}
+.boq-project-search-result-v16 span,.boq-project-search-empty-v16{color:#9dbdd2 !important}
+.boq-selected-project-v16{
+  background:#123550 !important;
+  border-color:#2a6685 !important;
+  color:#eaf8ff !important;
+}
+.boq-selected-project-v16 .muted{color:#9dbdd2 !important}
+.boq-project-bar-v14 .btn{
+  background:#123550 !important;
+  border-color:#2a6685 !important;
+  color:#dff6ff !important;
+}
+.boq-project-bar-v14 .btn:hover{background:#174b6d !important}
+
+</style>
+</head>
+<body>
+
+<div id="authScreenV6" class="auth-screen">
+  <div class="auth-box">
+    <div class="auth-brand"><img src="boqbee-logo.png" alt="BOQBEE"></div>
+    <div class="auth-title">Sign in</div>
+    <div class="auth-sub">Enter your username and password to access the system.</div>
+    <div class="form">
+      <div class="field"><label>Username</label><input id="loginUsernameV6" autocomplete="username" placeholder="Username"></div>
+      <div class="field"><label>Password</label><input id="loginPasswordV6" type="password" autocomplete="current-password" placeholder="Password"></div>
+      <div id="loginErrorV6" style="display:none;color:#a43a42;background:#fde8e9;border:1px solid #efc2c5;border-radius:8px;padding:9px;font-size:12px"></div>
+      <button class="btn primary" id="loginBtnV6" onclick="loginV6()">Sign In</button>
+    </div>
+  </div>
+</div>
+
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><img src="boqbee-logo.png" alt="BOQBEE"></div>
+  <div class="nav">
+    <button class="active" data-view="dashboard">Dashboard</button>
+    <button data-view="clients">Clients</button>
+    <button data-view="projects">Projects</button>
+    <button data-view="accounts">Accounts & Payments</button>
+    <button data-view="boq">BOQ Builder</button>
+    <button data-view="rates">Rate Master</button>
+    <button data-view="materials">Material Master</button>
+    <button data-view="finishes">Finish Master</button>
+    <button data-view="cabinets">Cabinet Master</button>
+    <button data-view="hardware">Hardware Master</button>
+    <button data-view="quotation">Quotation</button>
+    <button data-view="settings">Settings</button>
+    <button data-view="users">Users & Access</button>
+  </div>
+</aside>
+
+<main class="main">
+<div class="topbar">
+  <div>
+    <h1 id="pageTitle">Dashboard</h1>
+    <div class="project-pill" id="projectPill">No project selected</div>
+  </div>
+  <div class="session-area"><div class="session-user" id="sessionUser"></div><button class="btn small" onclick="logoutV6()">Logout</button><button class="btn primary" id="quickAdd" style="display:none">+ Add Cabinet</button></div>
+</div>
+
+<section id="dashboard" class="view active">
+  <div class="toolbar">
+    <div>
+      <div style="font-weight:700">Dashboard</div>
+      <div class="muted">Project and BOQ overview</div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid-v10">
+    <div class="dashboard-card-v10">
+      <div class="dashboard-label-v10">TOTAL PROJECTS</div>
+      <div class="dashboard-value-v10" id="dashTotalProjectsV10">0</div>
+      <div class="dashboard-note-v10">All projects</div>
+    </div>
+
+    <div class="dashboard-card-v10">
+      <div class="dashboard-label-v10">CURRENT MONTH BOQ VALUE</div>
+      <div class="dashboard-value-v10" id="dashMonthBOQV10">₹0</div>
+      <div class="dashboard-note-v10" id="dashMonthLabelV10"></div>
+    </div>
+
+    <div class="dashboard-card-v10">
+      <div class="dashboard-label-v10">CONFIRMED PROJECTS</div>
+      <div class="dashboard-value-v10" id="dashConfirmedProjectsV10">0</div>
+      <div class="dashboard-note-v10">Approved → Production → Installation → Completed</div>
+    </div>
+
+    <div class="dashboard-card-v10">
+      <div class="dashboard-label-v10">ALL PROJECT STATUS</div>
+      <div class="dashboard-value-v10" id="dashStatusTotalV10">0</div>
+      <div class="dashboard-note-v10">Project-wise status below</div>
+    </div>
+  </div>
+
+  <div class="status-card-v10">
+    <h3 style="margin:0 0 12px">All Project Status</h3>
+    <div id="dashProjectStatusListV11"></div>
+  </div>
+
+  <div class="finance-dashboard-card-v13">
+    <div class="toolbar" style="margin:0 0 12px">
+      <div><h3 style="margin:0">Project Accounts & Payments</h3><div class="muted">Project-wise financial overview</div></div>
+      <button class="btn small" onclick="showView('accounts')">Open Accounts & Payments</button>
+    </div>
+    <div class="dashboard-finance-grid-v13">
+      <div class="dashboard-card-v10"><div class="dashboard-label-v10">TOTAL PROJECT VALUE</div><div class="dashboard-value-v10" id="dashProjectValueV13">₹0</div><div class="dashboard-note-v10">BOQ / account value</div></div>
+      <div class="dashboard-card-v10"><div class="dashboard-label-v10">PAYMENTS RECEIVED</div><div class="dashboard-value-v10" id="dashPaymentsReceivedV13">₹0</div><div class="dashboard-note-v10">All project receipts</div></div>
+      <div class="dashboard-card-v10"><div class="dashboard-label-v10">PROJECT EXPENSES</div><div class="dashboard-value-v10" id="dashProjectExpensesV13">₹0</div><div class="dashboard-note-v10">Recorded project expenses</div></div>
+      <div class="dashboard-card-v10"><div class="dashboard-label-v10">OUTSTANDING BALANCE</div><div class="dashboard-value-v10" id="dashOutstandingV13">₹0</div><div class="dashboard-note-v10">Value less payments received</div></div>
+    </div>
+    <div id="dashProjectFinanceListV13" style="margin-top:14px"></div>
+  </div>
+</section>
+
+<section id="clients" class="view">
+  <div class="toolbar"><div class="muted">Client database</div><button class="btn primary" onclick="openClientModal()">+ New Client</button></div>
+  <div class="card"><div id="clientsTable"></div></div>
+</section>
+
+<section id="projects" class="view">
+  <div class="toolbar"><div class="muted">Projects are linked to clients and contain rooms + BOQ.</div><button class="btn primary" onclick="openProjectModal()">+ New Project</button></div>
+  <div class="card"><div id="projectsTable"></div></div>
+</section>
+
+<section id="accounts" class="view">
+  <div class="toolbar">
+    <div><div style="font-weight:700">Project Accounts & Payments</div><div class="muted">Track project value, payments received, expenses and outstanding balance.</div></div>
+  </div>
+  <div id="accountsScreenV13"></div>
+</section>
+
+<section id="boq" class="view">
+  <div id="boqScreen"></div>
+</section>
+
+<section id="rates" class="view">
+  <div class="toolbar"><div class="muted">Rates are attached to cabinet types/specifications, not raw materials.</div><button class="btn primary" onclick="openRateModal()">+ Add Rate</button></div>
+  <div class="card"><div id="ratesTable"></div></div>
+</section>
+
+<section id="materials" class="view">
+  <div class="toolbar">
+    <div><div style="font-weight:700">Material Master</div><div class="muted">Add or remove the material grades available in BOQ Builder and Rate Master.</div></div>
+    <button class="btn primary" onclick="openMaterialMasterModal()">+ Add Material</button>
+  </div>
+  <div class="card"><div id="materialsTable"></div></div>
+</section>
+
+<section id="finishes" class="view">
+  <div class="toolbar">
+    <div><div style="font-weight:700">Finish Master</div><div class="muted">Add or remove the finishes available in BOQ Builder and Rate Master.</div></div>
+    <button class="btn primary" onclick="openFinishMasterModal()">+ Add Finish</button>
+  </div>
+  <div class="card"><div id="finishesTable"></div></div>
+</section>
+
+<section id="cabinets" class="view">
+  <div class="toolbar">
+    <div><div style="font-weight:700">Cabinet Master</div><div class="muted">Add or remove cabinet types available in BOQ Builder and Rate Master.</div></div>
+    <button class="btn primary" onclick="openCabinetMasterModal()">+ Add Cabinet Type</button>
+  </div>
+  <div class="card"><div id="cabinetsTable"></div></div>
+</section>
+
+<section id="hardware" class="view">
+  <div class="toolbar">
+    <div><div style="font-weight:700">Hardware Master</div><div class="muted">Define hardware items and their BOQ rates.</div></div>
+    <button class="btn primary" onclick="openHardwareModalV7()">+ Add Hardware</button>
+  </div>
+  <div class="card"><div id="hardwareTableV7"></div></div>
+</section>
+<section id="quotation" class="view">
+  <div class="card" id="quotationScreen"></div>
+</section>
+
+
+<section id="users" class="view">
+  <div class="toolbar user-toolbar-v15">
+    <div><div style="font-weight:700">Users & Access</div><div class="muted">Super Admin can add, remove, activate/deactivate users, change User IDs and passwords, and control panel access.</div></div>
+    <button class="btn primary" onclick="openAddUserModalV15()">+ Add User</button>
+  </div>
+  <div class="card">
+    <div id="usersTableV6"></div>
+  </div>
+</section>
+<section id="settings" class="view">
+  <div class="card">
+    <h3>Company Profile</h3>
+    <div class="settings-inline-panel-v17" style="border-radius:12px;padding:18px">
+      <div class="grid2">
+        <div class="form">
+          <div class="field"><label>Company Name</label><input id="coName" oninput="updateCompanyHeaderPreview()"></div>
+          <div class="field"><label>Address</label><textarea id="coAddress" rows="4" oninput="updateCompanyHeaderPreview()"></textarea></div>
+          <div class="formgrid">
+            <div class="field"><label>Phone</label><input id="coPhone" oninput="updateCompanyHeaderPreview()"></div>
+            <div class="field"><label>Email</label><input id="coEmail" oninput="updateCompanyHeaderPreview()"></div>
+            <div class="field"><label>GSTIN</label><input id="coGST" oninput="updateCompanyHeaderPreview()"></div>
+          </div>
+        </div>
+        <div>
+          <div class="field"><label>Company Logo</label></div>
+          <div style="display:flex;gap:14px;align-items:flex-start;margin-top:8px">
+            <div id="logoPreview" class="company-logo-preview">No logo</div>
+            <div style="flex:1">
+              <input id="coLogo" type="file" accept="image/png,image/jpeg,image/webp">
+              <div class="kpi-note" style="margin-top:8px">Upload PNG, JPG or WebP.</div>
+              <div class="field" style="margin-top:12px">
+                <label for="coLogoScale">Quotation Logo Size: <b id="coLogoScaleValue">64 px</b></label>
+                <input id="coLogoScale" type="range" min="32" max="160" step="4" value="64" oninput="document.getElementById('coLogoScaleValue').textContent=this.value+' px';updateCompanyHeaderPreview()" style="width:100%">
+                <div class="kpi-note" style="margin-top:5px">This controls the logo size in the quotation header. The title area automatically stays vertically aligned with the company block.</div>
+              </div>
+              <div class="field" style="margin-top:12px">
+                <label style="display:flex;align-items:center;gap:9px;cursor:pointer">
+                  <input id="coShowCompanyName" type="checkbox" style="width:18px;height:18px;margin:0" oninput="updateCompanyHeaderPreview()">
+                  <span>Show Company Name in Quotation</span>
+                </label>
+                <div class="kpi-note" style="margin-top:5px">Turn this off to show only the centered logo in the quotation header. The BILL OF QUANTITIES title area will automatically rebalance.</div>
+              </div>
+              <div class="header-position-panel-v13" style="margin-top:16px">
+                <div style="font-weight:700;font-size:13px;margin-bottom:10px">Quotation Header Position</div>
+                <div class="kpi-note" style="margin-bottom:10px">Move the logo separately. Company Name, Address, Phone, Email and GSTIN are treated as one single company-information block, so one Horizontal and one Vertical control moves the entire block together.</div>
+                <div class="formgrid">
+                  <div class="field"><label for="coLogoX">Logo Horizontal: <b id="coLogoXValue">0 px</b></label><input id="coLogoX" type="range" min="-120" max="120" step="1" value="0" oninput="updateCompanyHeaderPreview()"></div>
+                  <div class="field"><label for="coLogoY">Logo Vertical: <b id="coLogoYValue">0 px</b></label><input id="coLogoY" type="range" min="-80" max="80" step="1" value="0" oninput="updateCompanyHeaderPreview()"></div>
+                  <div class="field"><label for="coDetailsX">Company Information Horizontal: <b id="coDetailsXValue">0 px</b></label><input id="coDetailsX" type="range" min="-140" max="140" step="1" value="0" oninput="updateCompanyHeaderPreview()"></div>
+                  <div class="field"><label for="coDetailsY">Company Information Vertical: <b id="coDetailsYValue">0 px</b></label><input id="coDetailsY" type="range" min="-100" max="100" step="1" value="0" oninput="updateCompanyHeaderPreview()"></div>
+                </div>
+                <div class="kpi-note" style="margin-top:8px">This single company-information block includes: Company Name, Address, Phone, Email and GSTIN. Their internal order and spacing stay together while moving.</div>
+                <div style="display:flex;justify-content:flex-end;margin-top:10px"><button type="button" class="btn small" onclick="resetCompanyHeaderPosition()">Reset Positions</button></div>
+              </div>
+              <div class="field" style="margin-top:16px"><label>Live Quotation Header Preview</label><div id="companyHeaderLivePreview" class="company-header-live-preview-v13"></div></div>
+
+              <div class="field" style="margin-top:16px">
+                <label>Quotation Terms & Conditions</label>
+                <textarea id="coTerms" rows="7" placeholder="Enter one term per line..."></textarea>
+                <div class="kpi-note" style="margin-top:5px">Enter one quotation term or condition per line. These will appear under “Terms & Operational Conditions” in the quotation.</div>
+              </div>
+
+              <button class="btn small" style="margin-top:10px" onclick="removeLogo()">Remove Logo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn primary" onclick="saveCompanyProfile()">Save Company Profile</button>
+      </div>
+    </div>
+
+    <h3 style="margin-top:22px">BOQ Number</h3>
+    <div class="settings-inline-panel-v17" style="border-radius:12px;padding:18px">
+      <div class="formgrid">
+        <div class="field"><label>BOQ Prefix</label><input id="boqPrefix" placeholder="BOQ"></div>
+        <div class="field"><label>Next Number</label><input id="boqNext" type="number" min="1" step="1"></div>
+      </div>
+      <div class="kpi-note" style="margin-top:8px">Example: BOQ-0001, BOQ-0002, BOQ-0003</div>
+      <div class="modal-actions"><button class="btn" onclick="saveBOQNumbering()">Save BOQ Numbering</button></div>
+    </div>
+
+    <h3 style="margin-top:22px">Data Tools</h3>
+    <p class="muted">Export a JSON backup before clearing browser data.</p>
+    <button class="btn" onclick="exportData()">Export Backup</button>
+    <button class="btn" onclick="resetData()">Reset Demo Data</button>
+  </div>
+</section>
+</main>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop"><div class="modal" id="modal"></div></div>
+
+<script>
+const KEY="interior_boq_mvp_v1";
+
+
+const DEFAULT_HARDWARE_V7=[
+ {id:"h1",category:"Hinges",name:"Soft Close Hinge",brand:"Standard",unit:"Nos",rate:0},
+ {id:"h2",category:"Hinges",name:"Blum Clip Top Hinge",brand:"Blum",unit:"Nos",rate:0},
+ {id:"h3",category:"Drawer Channels",name:"Soft Close Drawer Channel 450mm",brand:"Standard",unit:"Pair",rate:0},
+ {id:"h4",category:"Drawer Systems",name:"Tandem Drawer Box 500mm",brand:"Blum",unit:"Set",rate:0},
+ {id:"h5",category:"Handles",name:"Handle",brand:"Standard",unit:"Nos",rate:0},
+ {id:"h6",category:"Lift Up",name:"Lift-Up Stay",brand:"Standard",unit:"Pair",rate:0},
+ {id:"h7",category:"Pull Outs",name:"Bottle Pull Out",brand:"Standard",unit:"Set",rate:0},
+ {id:"h8",category:"Accessories",name:"Shelf Support",brand:"Standard",unit:"Nos",rate:0},
+ {id:"h9",category:"Accessories",name:"Magnetic Catch",brand:"Standard",unit:"Nos",rate:0}
+];
+
+const DEFAULT_USERS_V6=[
+  {id:"u-admin",username:"superadmin",displayName:"Super Admin",role:"superadmin",active:true,
+    passwordHash:"e86f78a8a3caf0b60d8e74e5942aa6d86dc150cd3c03338aef25b7d2d7e3acc7",permissions:{}},
+  {id:"u-user1",username:"user1",displayName:"Normal User 1",role:"user",active:true,
+    passwordHash:"1e9a6b9afd56cf274a1b46367cad2ff478fb6f0e29e5766195848b1482d2e2be",permissions:{dashboard:true,clients:true,projects:true,boq:true,quotation:true}},
+  {id:"u-user2",username:"user2",displayName:"Normal User 2",role:"user",active:true,
+    passwordHash:"cd92953692442115e21ca8c5daefaffe2b3d8737769700667cb8ca864ae1e7c4",permissions:{dashboard:true,clients:true,projects:true,boq:true,quotation:true}},
+  {id:"u-user3",username:"user3",displayName:"Normal User 3",role:"user",active:true,
+    passwordHash:"8821f0b783db3f50973e537d6c60e6d11b9f54e468f7ad3310d33a7ce5bd8e61",permissions:{dashboard:true,clients:true,projects:true,boq:true,quotation:true}}
+];
+const PANEL_LABELS_V6={
+  dashboard:"Dashboard",clients:"Clients",projects:"Projects",accounts:"Accounts & Payments",boq:"BOQ Builder",
+  rates:"Rate Master",materials:"Material Master",finishes:"Finish Master",cabinets:"Cabinet Master",quotation:"Quotation",settings:"Settings",hardware:"Hardware Master"
+};
+
+const DEFAULT_COMPANY={
+  name:"Your Company Name",address:"Your Company Address",phone:"",email:"",gst:"",logo:"",logoScale:64,showName:true,
+  logoX:0,logoY:0,detailsX:0,detailsY:0,
+  terms:[
+    "Quantities are based on the dimensions entered in the BOQ Builder and may be reconciled with actual site measurements.",
+    "Payment terms and project conditions may be specified by the company before final issue.",
+    "Any addition or variation to the scope of work will be billed under a separate Change Order approval."
+  ]
+};
+const FINISHES=["Laminate","Acrylic","PU Paint Finish","Membrane","Veneer"];
+const MATERIAL_GRADES=["MR Ply","BWP Ply","Marine Board"];
+const CABINET_TYPES=["Base Cabinet","Wall Cabinet","Tall Unit","Wardrobe","TV Unit","Loft"];
+
+function cabinetMasterList(){
+  return Array.isArray(db.cabinetTypes)&&db.cabinetTypes.length?db.cabinetTypes:[...CABINET_TYPES];
+}
+
+function materialMasterList(){
+  return Array.isArray(db.materials)&&db.materials.length?db.materials:[...MATERIAL_GRADES];
+}
+function finishMasterList(){
+  return Array.isArray(db.finishes)&&db.finishes.length?db.finishes:[...FINISHES];
+}
+function ensureMasterLists(){
+  if(!Array.isArray(db.materials))db.materials=[...MATERIAL_GRADES];
+  if(!Array.isArray(db.finishes))db.finishes=[...FINISHES];
+  if(!Array.isArray(db.cabinetTypes))db.cabinetTypes=[...CABINET_TYPES];
+  db.materials=[...new Map(db.materials.map(x=>String(x||"").trim()).filter(Boolean).map(x=>[x.toLowerCase(),x])).values()];
+  db.finishes=[...new Map(db.finishes.map(x=>String(x||"").trim()).filter(Boolean).map(x=>[x.toLowerCase(),x])).values()];
+  db.cabinetTypes=[...new Map(db.cabinetTypes.map(x=>String(x||"").trim()).filter(Boolean).map(x=>[x.toLowerCase(),x])).values()];
+}
+
+function isCabinetBOQItem(i){
+  return i?.itemKind==="cabinet" || (!i?.itemKind && cabinetMasterList().includes(i?.type));
+}
+
+
+const FINISH_DESCRIPTIONS={
+  "Laminate": material => `Laminate finish over ${material}, with edges finished with matching edgeband.`,
+  "Acrylic": material => `Acrylic finish over ${material}, with edges finished with matching edgeband.`,
+  "PU Paint Finish": material => `PU paint finish over ${material}, with edges finished as specified.`,
+  "Membrane": material => `Membrane finish over ${material}, with edges finished as specified.`,
+  "Veneer": material => `Veneer finish over ${material}, with edges finished as specified.`
+};
+const GRADE_DESCRIPTIONS={
+  "MR Ply":"MR plywood grade selected for the cabinet construction.",
+  "BWP Ply":"BWP plywood grade selected for the cabinet construction.",
+  "Marine Board":"Marine board grade selected for the cabinet construction."
+};
+function materialFinishDescription(type,finish,grade){
+  const material=grade || "selected plywood/board";
+  const builder=FINISH_DESCRIPTIONS[finish];
+  const f=builder ? builder(material) : `${finish} finish over ${material}, with edges finished as specified.`;
+  return `${type} with ${f}`;
+}
+function materialFinishDescriptionNoGrade(type,finish){
+  return materialFinishDescription(type,finish,"");
+}
+
+function rateKey(type,finish,grade){return `${type}||${finish}||${grade}`}
+function buildDefaultRates(){
+  const formulas={
+    "Base Cabinet":{unit:"Rft",formula:"width/304.8"},
+    "Wall Cabinet":{unit:"Rft",formula:"width/304.8"},
+    "Tall Unit":{unit:"Nos",formula:"qty"},
+    "Wardrobe":{unit:"Sqft",formula:"width*height/92903.04"},
+    "TV Unit":{unit:"Sqft",formula:"width*height/92903.04"},
+    "Loft":{unit:"Sqft",formula:"width*depth/92903.04"}
+  };
+  const arr=[];
+  let n=1;
+  CABINET_TYPES.forEach(type=>{
+    FINISHES.forEach(finish=>{
+      MATERIAL_GRADES.forEach(grade=>{
+        arr.push({id:"r"+n++,type,finish,materialGrade:grade,
+          unit:formulas[type].unit,formula:formulas[type].formula,rate:0});
+      });
+    });
+  });
+  return arr;
+}
+const defaultRates=buildDefaultRates();
+var db=JSON.parse(localStorage.getItem(KEY)||"null")||{
+ clients:[{id:"c1",name:"Demo Client",company:"",phone:"",email:"",address:""}],
+ projects:[{id:"p1",clientId:"c1",name:"Demo Residence",type:"Residential",address:"Bengaluru",status:"Estimation",rooms:["Kitchen","Master Bedroom","Living Room"],boqGSTRate:0,boqDiscountRate:0}],
+ boq:[],
+ rates:defaultRates,
+ materials:[...MATERIAL_GRADES],
+ finishes:[...FINISHES],
+ selectedProjectId:"p1",
+ selectedRoom:"Kitchen",
+ boqProjectSearch:"",
+ company:{...DEFAULT_COMPANY},
+ boqPrefix:"BOQ",
+ boqNext:1
+};
+
+async function hashPasswordV6(password){
+  const data=new TextEncoder().encode(password);
+  const hash=await crypto.subtle.digest("SHA-256",data);
+  return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+function currentUserV6(){return (db.users||[]).find(u=>u.id===db.currentUserId)||null}
+function isSuperAdminV6(){return currentUserV6()?.role==="superadmin"}
+function hasPermissionV6(view){
+  const u=currentUserV6();
+  if(!u)return false;
+  if(u.role==="superadmin")return true;
+  return !!u.permissions?.[view];
+}
+function approvalStatusV6(){
+  return project()?.boqApprovalStatus||"Draft";
+}
+function printUnlockedV6(){return approvalStatusV6()==="Approved"}
+function applyAccessV6(){
+  const u=currentUserV6();
+  document.querySelectorAll('.nav button[data-view]').forEach(btn=>{
+    const v=btn.dataset.view;
+    const visible=(u && (v==="users"?isSuperAdminV6():hasPermissionV6(v)));
+    btn.style.display=visible?"block":"none";
+  });
+  const area=document.getElementById("sessionUser");
+  if(area)area.textContent=u?`${u.displayName} • ${u.role==="superadmin"?"Super Admin":"Normal User"}`:"";
+  const auth=document.getElementById("authScreenV6");
+  if(auth)auth.style.display=u?"none":"flex";
+  const app=document.querySelector(".app");
+  if(app)app.style.display=u?"flex":"none";
+}
+async function loginV6(){
+  const username=document.getElementById("loginUsernameV6").value.trim().toLowerCase();
+  const password=document.getElementById("loginPasswordV6").value;
+  const err=document.getElementById("loginErrorV6");
+  const btn=document.getElementById("loginBtnV6");
+  err.style.display="none";btn.disabled=true;
+  try{
+    const user=(db.users||[]).find(u=>u.username.toLowerCase()===username);
+    const hash=await hashPasswordV6(password);
+    if(!user||!user.active||user.passwordHash!==hash){
+      err.textContent=!user?"Invalid username or password.":(!user.active?"This user is inactive.":"Invalid username or password.");
+      err.style.display="block";return;
+    }
+    db.currentUserId=user.id;
+    localStorage.setItem(KEY,JSON.stringify(db));
+    applyAccessV6();
+    showView("dashboard");
+  }finally{btn.disabled=false}
+}
+function logoutV6(){
+  db.currentUserId=null;
+  localStorage.setItem(KEY,JSON.stringify(db));
+  applyAccessV6();
+  document.getElementById("loginUsernameV6").value="";
+  document.getElementById("loginPasswordV6").value="";
+}
+function initUsersV6(){
+  if(!Array.isArray(db.users)||!db.users.length){
+    db.users=DEFAULT_USERS_V6.map(u=>({...u,permissions:{...(u.permissions||{})}}));
+  }else{
+    // Normalize existing records without re-adding users that Super Admin intentionally removed.
+    db.users=db.users.map(u=>({
+      ...u,
+      displayName:u.displayName||u.username||"User",
+      active:u.active!==false,
+      permissions:{...(u.permissions||{})}
+    }));
+  }
+}
+
+function save(){localStorage.setItem(KEY,JSON.stringify(db)); renderAll();}
+function uid(p){return p+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function money(n){return "₹"+Number(n||0).toLocaleString("en-IN",{maximumFractionDigits:2})}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function project(){return db.projects.find(x=>x.id===db.selectedProjectId)}
+function rateFor(type,finish,grade){
+  return db.rates.find(r=>r.type===type&&r.finish===finish&&r.materialGrade===grade)
+      || db.rates.find(r=>r.type===type&&r.finish===finish)
+      || db.rates.find(r=>r.type===type);
+}
+function finishOptions(type,selected){
+  const finishes=[...new Set(db.rates.filter(r=>r.type===type).map(r=>r.finish))];
+  const list=finishes.length?finishes:FINISHES;
+  return list.map(x=>`<option ${x===selected?"selected":""}>${esc(x)}</option>`).join("");
+}
+function gradeOptions(type,finish,selected){
+  let list=materialMasterList();
+  if(selected&&!list.some(x=>x===selected))list=[selected,...list];
+  if(!list.length)list=[selected||""];
+  return list.filter(Boolean).map(x=>`<option ${x===selected?"selected":""}>${esc(x)}</option>`).join("");
+}
+function calc(formula,w,h,d,q){try{ return Function("width","height","depth","qty","return "+formula)(+w,+h,+d,+q)||0 }catch(e){return 0}}
+function openModal(html){document.getElementById("modal").innerHTML=html;document.getElementById("modalBackdrop").classList.add("show")}
+function closeModal(){document.getElementById("modalBackdrop").classList.remove("show")}
+document.getElementById("modalBackdrop").addEventListener("click",e=>{if(e.target.id==="modalBackdrop")closeModal()});
+
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>showView(b.dataset.view));
+function showView(v){
+  if(!currentUserV6()){applyAccessV6();return}
+  if(v==="users"){if(!isSuperAdminV6())return}else if(!hasPermissionV6(v)){alert("You do not have access to this panel.");return}
+  document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));
+  document.getElementById(v).classList.add("active");
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.view===v));
+  document.getElementById("pageTitle").textContent={dashboard:"Dashboard",clients:"Clients",projects:"Projects",accounts:"Accounts & Payments",boq:"BOQ Builder",rates:"Rate Master",materials:"Material Master",finishes:"Finish Master",cabinets:"Cabinet Master",quotation:"Quotation",settings:"Settings",users:"Users & Access"}[v];
+  applyAccessV6();
+  renderAll();
+}
+
+function renderAll(){renderDashboard();renderDashboardFinanceV13();renderClients();renderProjects();renderAccountsV13();renderBOQ();renderRates();renderMaterialMaster();renderFinishMaster();renderCabinetMaster();renderQuotation();renderUsersV6();renderHardwareV7();loadBOQDocumentSettings();
+ let p=project();document.getElementById("projectPill").textContent=p?`${p.name} • ${p.type}`:"No project selected";
+}
+function projectCreatedDateV10(p){
+  return p.createdAt || p.created_at || p.dateCreated || null;
+}
+function projectBOQSubtotalV13(projectId){
+  const items=(db.boq||[]).filter(x=>x.projectId===projectId);
+  const itemTotal=items.reduce((sum,i)=>sum+(+(i.baseAmount??i.amount)||0),0);
+  const linkedHardware=(db.boqHardware||[]).filter(h=>h.projectId===projectId).reduce((sum,h)=>sum+(+h.amount||0),0);
+  const standaloneHardware=(db.boqHardwareStandalone||[]).filter(h=>h.projectId===projectId).reduce((sum,h)=>sum+(+h.amount||0),0);
+  return itemTotal+linkedHardware+standaloneHardware;
+}
+function projectCommercialTotalsV13(projectId){
+  const p=(db.projects||[]).find(x=>x.id===projectId)||{};
+  const subtotal=projectBOQSubtotalV13(projectId);
+  const gstRate=Math.max(0,Math.min(100,+p.boqGSTRate||0));
+  const discountRate=Math.max(0,Math.min(100,+p.boqDiscountRate||0));
+  const discountAmount=subtotal*discountRate/100;
+  const taxable=Math.max(0,subtotal-discountAmount);
+  const gstAmount=taxable*gstRate/100;
+  const grandTotal=taxable+gstAmount;
+  return {subtotal,gstRate,discountRate,discountAmount,taxable,gstAmount,grandTotal};
+}
+function getProjectBOQValueV10(projectId){return projectCommercialTotalsV13(projectId).grandTotal;}
+function isCurrentMonthV10(dateValue){
+  if(!dateValue)return false;
+  const d=new Date(dateValue);
+  if(Number.isNaN(d.getTime()))return false;
+  const now=new Date();
+  return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth();
+}
+function projectCreatedDateV10(p){
+  return p.createdAt || p.created_at || p.dateCreated || null;
+}
+function getProjectBOQValueV10(projectId){return projectCommercialTotalsV13(projectId).grandTotal;}
+function isCurrentMonthV10(value){
+  if(!value)return false;
+  const d=new Date(value);
+  if(Number.isNaN(d.getTime()))return false;
+  const now=new Date();
+  return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth();
+}
+function projectCreatedDateV10(p){
+  return p.createdAt || p.created_at || p.dateCreated || null;
+}
+function getProjectBOQValueV10(projectId){return projectCommercialTotalsV13(projectId).grandTotal;}
+function isCurrentMonthV10(value){
+  if(!value)return false;
+  const d=new Date(value);
+  if(Number.isNaN(d.getTime()))return false;
+  const now=new Date();
+  return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth();
+}
+function renderDashboard(){
+  ensureProjectAccountsV13();
+  const projects=[...(db.projects||[])];
+  const totalProjects=projects.length;
+  const confirmedProjects=projects.filter(p=>{
+    const s=String(p.status||"").trim().toLowerCase();
+    return ["approved","production","installation","completed"].includes(s);
+  }).length;
+  const currentMonthBOQ=projects
+    .filter(p=>isCurrentMonthV10(projectCreatedDateV10(p)))
+    .reduce((sum,p)=>sum+getProjectBOQValueV10(p.id),0);
+
+  const totalEl=document.getElementById("dashTotalProjectsV10");
+  const monthEl=document.getElementById("dashMonthBOQV10");
+  const confirmedEl=document.getElementById("dashConfirmedProjectsV10");
+  const statusTotalEl=document.getElementById("dashStatusTotalV10");
+  const monthLabel=document.getElementById("dashMonthLabelV10");
+  const list=document.getElementById("dashProjectStatusListV11");
+
+  if(totalEl)totalEl.textContent=totalProjects;
+  if(monthEl)monthEl.textContent=money(currentMonthBOQ);
+  if(confirmedEl)confirmedEl.textContent=confirmedProjects;
+  if(statusTotalEl)statusTotalEl.textContent=totalProjects;
+
+  if(monthLabel){
+    monthLabel.textContent=new Date().toLocaleDateString("en-IN",{month:"long",year:"numeric"});
+  }
+
+  if(list){
+    if(!projects.length){
+      list.innerHTML='<div class="project-status-empty-v11">No projects available.</div>';
+    }else{
+      const pendingCount=projects.filter(x=>(x.boqApprovalStatus||"Draft")==="Awaiting Approval").length;
+      list.innerHTML=`
+        <div class="toolbar" style="margin:0 0 10px">
+          <div class="muted">${pendingCount} project${pendingCount===1?"":"s"} pending BOQ Approval</div>
+        </div>
+        <div style="overflow-x:auto">
+        <table class="project-status-table-v11">
+          <thead><tr><th>#</th><th>Project Name</th><th>Client</th><th>Status</th><th>BOQ Approval</th><th class="num">PAYMENTS RECEIVED</th><th class="num">PROJECT EXPENSES</th><th class="num">OUTSTANDING BALANCE</th><th></th></tr></thead>
+          <tbody>${projects.map((p,index)=>{
+            const c=db.clients.find(x=>x.id===p.clientId);
+            const status=p.status||"Estimation";
+            const approval=p.boqApprovalStatus||"Draft";
+            const approvalLabel=approval==="Awaiting Approval"?"Pending BOQ Approval":approval;
+            const fin=projectAccountStatsV13(p.id);
+            const action=approval==="Awaiting Approval" && isSuperAdminV6()
+              ? `<div class="dashboard-approval-wrap"><button class="btn primary small" onclick="approveBOQProjectV6('${p.id}')">Approve</button><button class="btn danger small" onclick="rejectBOQProjectV6('${p.id}')">Reject</button></div>`
+              : "";
+            return `<tr>
+              <td>${index+1}</td>
+              <td><b>${esc(p.name)}</b></td>
+              <td>${esc(c?.name||"")}</td>
+              <td><span class="project-status-badge-v11">${esc(status)}</span></td>
+              <td>${approvalBadgeV6(approvalLabel)}</td>
+              <td class="num project-finance-cell-v13">${money(fin.payments)}</td>
+              <td class="num project-finance-cell-v13">${money(fin.expenses)}</td>
+              <td class="num project-finance-cell-v13">${money(fin.balance)}</td>
+              <td class="num">${action}</td>
+            </tr>`;
+          }).join("")}</tbody>
+        </table>
+        </div>`;
+    }
+  }
+}
+function projectBOQTotalV13(projectId){
+  return projectCommercialTotalsV13(projectId).grandTotal;
+}
+function ensureProjectAccountsV13(){
+  if(!Array.isArray(db.projectAccounts))db.projectAccounts=[];
+  (db.projects||[]).forEach(p=>{
+    let a=db.projectAccounts.find(x=>x.projectId===p.id);
+    if(!a)db.projectAccounts.push({projectId:p.id,accountValue:null,entries:[]});
+    else{a.entries=Array.isArray(a.entries)?a.entries:[];if(a.accountValue!==null&&a.accountValue!==undefined&&a.accountValue!==""&&Number.isNaN(+a.accountValue))a.accountValue=null;}
+  });
+  const projectIds=new Set((db.projects||[]).map(p=>p.id));db.projectAccounts=db.projectAccounts.filter(a=>projectIds.has(a.projectId));
+}
+function projectAccountV13(projectId){ensureProjectAccountsV13();return db.projectAccounts.find(x=>x.projectId===projectId)}
+function projectAccountStatsV13(projectId){
+  const rec=projectAccountV13(projectId)||{accountValue:null,entries:[]},boqValue=projectBOQTotalV13(projectId);
+  const accountValue=(rec.accountValue!==null&&rec.accountValue!==undefined&&rec.accountValue!=="")?Math.max(0,+rec.accountValue||0):boqValue;
+  const payments=(rec.entries||[]).filter(e=>e.type==="Payment Received").reduce((s,e)=>s+(+e.amount||0),0);
+  const expenses=(rec.entries||[]).filter(e=>e.type==="Expense").reduce((s,e)=>s+(+e.amount||0),0);
+  return {boqValue,accountValue,payments,expenses,balance:accountValue-payments,netCash:payments-expenses,entries:rec.entries||[]};
+}
+function openProjectAccountsV13(projectId){const p=db.projects.find(x=>x.id===projectId);if(!p)return;db.selectedProjectId=projectId;db.selectedRoom=p.rooms?.[0]||"General";db.selectedAccountProjectId=projectId;save();showView("accounts")}
+function formatFinanceDateV13(value){if(!value)return "—";const d=new Date(String(value).includes("T")?value:`${value}T00:00:00`);return Number.isNaN(d.getTime())?String(value):d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"})}
+function renderDashboardFinanceV13(){
+  ensureProjectAccountsV13();const projects=db.projects||[];const stats=projects.map(p=>({p,s:projectAccountStatsV13(p.id)}));
+  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=money(val)};
+  set("dashProjectValueV13",stats.reduce((a,x)=>a+x.s.accountValue,0));set("dashPaymentsReceivedV13",stats.reduce((a,x)=>a+x.s.payments,0));set("dashProjectExpensesV13",stats.reduce((a,x)=>a+x.s.expenses,0));set("dashOutstandingV13",stats.reduce((a,x)=>a+x.s.balance,0));
+  const el=document.getElementById("dashProjectFinanceListV13");if(!el)return;if(!projects.length){el.innerHTML='<div class="empty">No projects available.</div>';return}
+  el.innerHTML=`<table><thead><tr><th>Project</th><th>BOQ / Account Value</th><th>Payments Received</th><th>Expenses</th><th>Outstanding</th><th>Last Payment</th><th></th></tr></thead><tbody>${stats.map(({p,s})=>{const c=db.clients.find(x=>x.id===p.clientId);const payments=s.entries.filter(e=>e.type==="Payment Received").sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));const last=payments[0];return `<tr><td><b>${esc(p.name)}</b><div class="muted">${esc(c?.name||"")}</div></td><td>${money(s.accountValue)}</td><td>${money(s.payments)}</td><td>${money(s.expenses)}</td><td>${money(s.balance)}</td><td>${last?esc(formatFinanceDateV13(last.date)):"—"}</td><td class="num"><button class="btn small" onclick="openProjectAccountsV13('${p.id}')">Manage</button></td></tr>`}).join("")}</tbody></table>`;
+}
+function renderAccountsV13(){
+  const el=document.getElementById("accountsScreenV13");if(!el)return;
+  if(!hasPermissionV6("accounts")&&!isSuperAdminV6()){el.innerHTML='<div class="card empty">Accounts & Payments access required.</div>';return}
+  ensureProjectAccountsV13();let selectedId=db.selectedAccountProjectId||db.selectedProjectId||(db.projects[0]?.id);
+  if(!selectedId||!db.projects.some(p=>p.id===selectedId)){selectedId=db.projects[0]?.id;db.selectedAccountProjectId=selectedId}
+  if(!selectedId){el.innerHTML='<div class="card empty">Create a project first.</div>';return}
+  const p=db.projects.find(x=>x.id===selectedId),c=db.clients.find(x=>x.id===p.clientId),s=projectAccountStatsV13(p.id),account=projectAccountV13(p.id),entries=[...(s.entries||[])].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+  el.innerHTML=`<div class="card"><div class="toolbar"><div><div style="font-weight:700">Project Accounts & Payments</div><div class="muted">Manage financial records for the selected project.</div></div><div class="toolbar-right"><label style="font-size:12px;color:#62766a">Project</label><select id="accountsProjectSelectV13" style="min-width:300px">${db.projects.map(pr=>`<option value="${pr.id}" ${pr.id===p.id?"selected":""}>${esc(pr.name)}${db.clients.find(x=>x.id===pr.clientId)?.name?` • ${esc(db.clients.find(x=>x.id===pr.clientId).name)}`:""}</option>`).join("")}</select></div></div>
+  <div class="account-project-head-v13"><div><b>${esc(p.name)}</b><div class="muted">${esc(c?.name||"")}${p.address?` • ${esc(p.address)}`:""}</div></div><button class="btn small" onclick="openProjectModal('${p.id}')">Edit Project</button></div>
+  <div class="account-summary-grid-v13"><div><span>BOQ Value</span><b>${money(s.boqValue)}</b><small>Current BOQ total including hardware</small></div><div><span>Account / Contract Value</span><b>${money(s.accountValue)}</b><small>${account.accountValue==null||account.accountValue===""?"Using current BOQ value":"Manual account value"}</small></div><div><span>Payments Received</span><b>${money(s.payments)}</b><small>Total receipts recorded</small></div><div><span>Expenses</span><b>${money(s.expenses)}</b><small>Project expenses recorded</small></div><div><span>Outstanding</span><b>${money(s.balance)}</b><small>Account value less payments</small></div><div><span>Net Cash</span><b>${money(s.netCash)}</b><small>Payments less expenses</small></div></div>
+  <div class="account-control-row-v13"><div class="field" style="max-width:320px"><label>Manual Account / Contract Value (optional)</label><input id="accountValueV13" type="number" min="0" step="0.01" value="${account.accountValue??""}" placeholder="Leave blank to use BOQ value"></div><div class="toolbar-right" style="align-self:end"><button class="btn small" onclick="clearProjectAccountValueV13()">Use BOQ Value</button><button class="btn small primary" onclick="saveProjectAccountValueV13()">Save Account Value</button><button class="btn" onclick="openProjectLedgerModalV13('Payment Received')">+ Payment</button><button class="btn" onclick="openProjectLedgerModalV13('Expense')">+ Expense</button></div></div></div>
+  <div class="card" style="margin-top:14px"><div class="toolbar" style="margin:0 0 10px"><div><b>Account & Payment Ledger</b><div class="muted">All entries belong to ${esc(p.name)}.</div></div></div>${entries.length?`<table><thead><tr><th>Date</th><th>Type</th><th>Party / Reference</th><th>Notes</th><th class="num">Amount</th><th></th></tr></thead><tbody>${entries.map(e=>{const partyOrReference=e.type==="Expense"?(e.partyName||e.reference||""):(e.reference||"");const partyType=e.type==="Expense"?(e.partyType||""):"";return `<tr><td>${esc(formatFinanceDateV13(e.date))}</td><td><span class="badge ${e.type==="Payment Received"?"good":""}">${esc(e.type)}</span>${partyType?`<div class="muted" style="margin-top:4px;font-size:11px">${esc(partyType)}</div>`:""}</td><td>${esc(partyOrReference)}</td><td>${esc(e.notes||"")}</td><td class="num">${money(e.amount)}</td><td class="num"><button class="btn small" onclick="openProjectLedgerModalV13('${e.type}','${e.id}')">Edit</button> <button class="btn small danger" onclick="deleteProjectLedgerEntryV13('${e.id}')">Delete</button></td></tr>`}).join("")}</tbody></table>`:'<div class="empty">No payments or expenses recorded for this project.</div>'}</div>`;
+  const select=document.getElementById("accountsProjectSelectV13");if(select)select.onchange=()=>{db.selectedAccountProjectId=select.value;db.selectedProjectId=select.value;db.selectedRoom=db.projects.find(p=>p.id===select.value)?.rooms?.[0]||"General";save()};
+}
+function updateLedgerPartyFieldsV13(){
+  const type=document.getElementById("ledgerTypeV13")?.value;
+  const expenseFields=document.getElementById("ledgerExpensePartyFieldsV13");
+  const paymentFields=document.getElementById("ledgerPaymentRefFieldV13");
+  if(expenseFields)expenseFields.style.display=type==="Expense"?"block":"none";
+  if(paymentFields)paymentFields.style.display=type==="Payment Received"?"block":"none";
+}
+function setLedgerPartyTypeV13(type){
+  const input=document.getElementById("ledgerPartyTypeV13");
+  if(input)input.value=type;
+  document.querySelectorAll(".party-choice-v13").forEach(btn=>btn.classList.toggle("selected",btn.dataset.type===type));
+}
+function openProjectLedgerModalV13(type="Payment Received",id=""){
+  if(!hasPermissionV6("accounts")&&!isSuperAdminV6())return alert("You do not have access to Accounts & Payments.");
+  const p=db.projects.find(x=>x.id===(db.selectedAccountProjectId||db.selectedProjectId));
+  if(!p)return alert("Select a project first.");
+  const rec=projectAccountV13(p.id),existing=rec.entries.find(e=>e.id===id)||{},defaultType=existing.type||type,defaultDate=existing.date||new Date().toISOString().slice(0,10);
+  const legacyPartyName=existing.partyName||((existing.type==="Expense")?existing.reference||"":"");
+  const partyType=existing.partyType||"Vendor";
+  openModal(`<h2>${id?"Edit":"Add"} Project ${defaultType}</h2>
+  <div class="formgrid">
+    <div class="field"><label>Entry Type</label><select id="ledgerTypeV13" onchange="updateLedgerPartyFieldsV13()"><option ${defaultType==="Payment Received"?"selected":""}>Payment Received</option><option ${defaultType==="Expense"?"selected":""}>Expense</option></select></div>
+    <div class="field"><label>Date</label><input id="ledgerDateV13" type="date" value="${esc(defaultDate)}"></div>
+    <div class="field"><label>Amount</label><input id="ledgerAmountV13" type="number" min="0" step="0.01" value="${existing.amount??""}"></div>
+  </div>
+  <div id="ledgerExpensePartyFieldsV13" style="margin-top:12px;display:${defaultType==="Expense"?"block":"none"}">
+    <div class="field"><label>Party Type</label><div class="ledger-party-type-v13"><button type="button" class="btn small party-choice-v13 ${partyType==="Vendor"?"selected":""}" data-type="Vendor" onclick="setLedgerPartyTypeV13('Vendor')">Vendor</button><button type="button" class="btn small party-choice-v13 ${partyType==="Supplier"?"selected":""}" data-type="Supplier" onclick="setLedgerPartyTypeV13('Supplier')">Supplier</button></div><input type="hidden" id="ledgerPartyTypeV13" value="${esc(partyType)}"></div>
+    <div class="field" style="margin-top:10px"><label>Party Name</label><input id="ledgerPartyNameV13" value="${esc(legacyPartyName)}" placeholder="Enter vendor or supplier name"></div>
+  </div>
+  <div id="ledgerPaymentRefFieldV13" class="field" style="margin-top:12px;display:${defaultType==="Payment Received"?"block":"none"}"><label>Reference</label><input id="ledgerRefV13" value="${esc(existing.reference||"")}" placeholder="Receipt / UTR / Voucher No."></div>
+  <div class="field" style="margin-top:12px"><label>Notes</label><textarea id="ledgerNotesV13" rows="3" placeholder="Payment or expense details">${esc(existing.notes||"")}</textarea></div>
+  <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveProjectLedgerEntryV13('${esc(id)}')">Save Entry</button></div>`);
+  updateLedgerPartyFieldsV13();
+  renderDashboardFinanceV13();
+}
+function saveProjectLedgerEntryV13(id=""){
+  if(!hasPermissionV6("accounts")&&!isSuperAdminV6())return;
+  const pid=db.selectedAccountProjectId||db.selectedProjectId,rec=projectAccountV13(pid);if(!rec)return;
+  const type=document.getElementById("ledgerTypeV13").value,date=document.getElementById("ledgerDateV13").value||new Date().toISOString().slice(0,10),amount=+document.getElementById("ledgerAmountV13").value||0;
+  if(amount<=0)return alert("Enter an amount greater than zero.");
+  let obj;
+  if(type==="Expense"){
+    const partyType=document.getElementById("ledgerPartyTypeV13")?.value||"Vendor";
+    const partyName=document.getElementById("ledgerPartyNameV13")?.value.trim()||"";
+    if(!partyName)return alert("Enter a vendor or supplier party name.");
+    obj={id:id||uid("le"),type,date,amount,partyType,partyName,reference:"",notes:document.getElementById("ledgerNotesV13").value.trim()};
+  }else{
+    obj={id:id||uid("le"),type,date,amount,reference:document.getElementById("ledgerRefV13")?.value.trim()||"",partyType:"",partyName:"",notes:document.getElementById("ledgerNotesV13").value.trim()};
+  }
+  const ix=rec.entries.findIndex(e=>e.id===obj.id);if(ix>=0)rec.entries[ix]=obj;else rec.entries.push(obj);save();closeModal();db.selectedAccountProjectId=pid;renderAccountsV13();renderDashboardFinanceV13();
+}
+function deleteProjectLedgerEntryV13(id){if(!hasPermissionV6("accounts")&&!isSuperAdminV6())return alert("You do not have access to Accounts & Payments.");const pid=db.selectedAccountProjectId||db.selectedProjectId,rec=projectAccountV13(pid);if(!rec)return;const e=rec.entries.find(x=>x.id===id);if(!e)return;if(!confirm(`Delete ${e.type.toLowerCase()} of ${money(e.amount)}?`))return;rec.entries=rec.entries.filter(x=>x.id!==id);save();db.selectedAccountProjectId=pid;renderAccountsV13()}
+function saveProjectAccountValueV13(){if(!hasPermissionV6("accounts")&&!isSuperAdminV6())return alert("You do not have access to Accounts & Payments.");const pid=db.selectedAccountProjectId||db.selectedProjectId,rec=projectAccountV13(pid);if(!rec)return;const raw=document.getElementById("accountValueV13")?.value??"";if(raw!==""&&(+raw<0||Number.isNaN(+raw)))return alert("Enter a valid account value.");rec.accountValue=raw===""?null:+raw;save();db.selectedAccountProjectId=pid;renderAccountsV13()}
+function clearProjectAccountValueV13(){const pid=db.selectedAccountProjectId||db.selectedProjectId,rec=projectAccountV13(pid);if(!rec)return;rec.accountValue=null;save();db.selectedAccountProjectId=pid;renderAccountsV13()}
+function renderClients(){
+ if(!db.clients.length){document.getElementById("clientsTable").innerHTML='<div class="empty">No clients.</div>';return}
+ document.getElementById("clientsTable").innerHTML=`<table><thead><tr><th>Client</th><th>Phone</th><th>Email</th><th>Projects</th><th></th></tr></thead><tbody>`+db.clients.map(c=>`<tr><td><b>${esc(c.name)}</b><div class="muted">${esc(c.company||"")}</div></td><td>${esc(c.phone)}</td><td>${esc(c.email)}</td><td>${db.projects.filter(p=>p.clientId===c.id).length}</td><td class="num"><button class="btn small" onclick="openClientModal('${c.id}')">Edit</button> <button class="btn small danger" onclick="deleteClient('${c.id}')">Delete</button></td></tr>`).join("")+"</tbody></table>";
+}
+function renderProjects(){
+ if(!db.projects.length){document.getElementById("projectsTable").innerHTML='<div class="empty">No projects.</div>';return}
+ document.getElementById("projectsTable").innerHTML=`<table><thead><tr><th>Project</th><th>Client</th><th>Type</th><th>Status</th><th>BOQ</th><th></th></tr></thead><tbody>`+db.projects.map(p=>{let c=db.clients.find(x=>x.id===p.clientId);return `<tr><td><b>${esc(p.name)}</b><div class="muted">${esc(p.address||"")}</div></td><td>${esc(c?.name||"")}</td><td>${esc(p.type)}</td><td><span class="badge">${esc(p.status)}</span></td><td>${db.boq.filter(x=>x.projectId===p.id).length} items</td><td class="num"><button class="btn small" onclick="selectProject('${p.id}')">Open</button> <button class="btn small" onclick="openProjectModal('${p.id}')">Edit</button> <button class="btn small danger" onclick="deleteProject('${p.id}')">Delete</button></td></tr>`}).join("")+"</tbody></table>";
+}
+function selectProject(id){db.selectedProjectId=id;db.selectedRoom=db.projects.find(p=>p.id===id)?.rooms?.[0]||"General";save();showView("boq")}
+function deleteProject(id){
+  if(!hasPermissionV6("projects")&&!isSuperAdminV6())return alert("You do not have access to Projects.");
+  const p=db.projects.find(x=>x.id===id);
+  if(!p)return;
+  const boqCount=(db.boq||[]).filter(x=>x.projectId===id).length;
+  const standaloneHw=(db.boqHardwareStandalone||[]).filter(x=>x.projectId===id).length;
+  const note=boqCount||standaloneHw?`\n\nThis will also delete ${boqCount} BOQ item(s) and ${standaloneHw} project-level hardware item(s) belonging to this project.`:"";
+  if(!confirm(`Delete project “${p.name}”?${note}\n\nThis action cannot be undone.`))return;
+  db.projects=db.projects.filter(x=>x.id!==id);
+  db.boq=(db.boq||[]).filter(x=>x.projectId!==id);
+  db.boqHardware=(db.boqHardware||[]).filter(x=>{const cab=db.boq.find(b=>b.id===x.cabinetId);return !!cab;});
+  db.boqHardwareStandalone=(db.boqHardwareStandalone||[]).filter(x=>x.projectId!==id);
+  db.projectAccounts=(db.projectAccounts||[]).filter(x=>x.projectId!==id);
+  if(db.selectedProjectId===id){db.selectedProjectId=db.projects[0]?.id||null;db.selectedRoom=db.projects[0]?.rooms?.[0]||"General";}
+  save();renderAll();showView("projects");
+}
+function renderBOQ(){
+ let el=document.getElementById("boqScreen");
+ let p=project();
+
+ if(!p && db.projects.length){
+   db.selectedProjectId=db.projects[0].id;
+   p=project();
+ }
+ if(!p){
+   el.innerHTML=`<div class="card empty">
+     No projects available. Create a project first in Projects.
+     <div style="margin-top:12px"><button class="btn primary" onclick="showView('projects')">Open Projects</button></div>
+   </div>`;
+   return;
+ }
+
+ let rooms=p.rooms||["General"];
+ if(!rooms.length)rooms=["General"];
+ if(!rooms.includes(db.selectedRoom))db.selectedRoom=rooms[0];
+
+ let items=db.boq.filter(x=>x.projectId===p.id&&x.room===db.selectedRoom);
+ let projectOptions=boqProjectOptionsV14(db.boqProjectSearch||"",p.id);
+ let roomTabs=rooms.map(r=>`<button class="btn room-tab ${r===db.selectedRoom?'active':''}" onclick="chooseRoom('${esc(r)}')">${esc(r)}</button>`).join("");
+
+ el.innerHTML=`<div class="toolbar">
+   <div><b>BOQ Builder</b><div class="muted">Dimension-based estimation</div></div>
+ </div>
+
+ <div class="approval-box" style="margin:14px 0">
+   <div class="toolbar" style="margin:0">
+     <div>
+       <b>BOQ Approval: ${typeof approvalBadgeV6==="function"?approvalBadgeV6(p.boqApprovalStatus||"Draft"):""}</b>
+       <div class="kpi-note">${
+         p.boqApprovalStatus==="Approved"
+           ? ((+p.boqDiscountRate||0)>0
+               ? "Approved by Super Admin. Discount is approved and printing is unlocked."
+               : "Approved by Super Admin. Printing is unlocked.")
+           : ((+p.boqDiscountRate||0)>0
+               ? "A discount is applied. Submit this BOQ for Super Admin approval before printing."
+               : "Printing stays locked until Super Admin approval.")
+       }</div>
+     </div>
+     <div class="toolbar-right">
+       ${p.boqApprovalStatus!=="Approved"?`<button class="btn" onclick="submitBOQForApprovalV6()">Submit for Approval</button>`:""}
+       ${typeof isSuperAdminV6==="function" && isSuperAdminV6() && p.boqApprovalStatus==="Awaiting Approval"?`<button class="btn primary" onclick="approveBOQV6()">Approve BOQ</button><button class="btn danger" onclick="rejectBOQV6()">Reject</button>`:""}
+     </div>
+   </div>
+ </div>
+
+ <div class="boq-project-bar-v14">
+   <div class="boq-project-select-v14" style="flex-wrap:wrap;width:100%;align-items:flex-end">
+     <div style="min-width:220px"><label for="boqProjectSearchV14">PROJECT</label></div>
+     <div class="boq-project-search-wrap-v16">
+       <input id="boqProjectSearchV14" value="${esc(db.boqProjectSearch||"")}" placeholder="Search project name, client, address, type or status..." autocomplete="off" oninput="filterBOQProjectsV14(this.value)" onfocus="showBOQProjectSearchResultsV16()">
+       <div id="boqProjectSearchResultsV16" class="boq-project-search-results-v16"></div>
+     </div>
+     <button type="button" class="btn small" onclick="clearBOQProjectSearchV16()">Clear</button>
+     <div class="boq-selected-project-v16"><span class="muted">Selected:</span> <b id="boqSelectedProjectNameV16">${esc(p.name)}</b></div>
+     <div class="muted" id="boqProjectSearchCountV14">${db.projects.length} project${db.projects.length===1?"":"s"}</div>
+   </div>
+ </div>
+
+ <div class="card boq-inline-panel-v17" style="margin:14px 0 12px">
+   <div class="toolbar" style="margin:0 0 10px">
+     <div><b>BOQ DOCUMENT REFERENCE</b><div class="kpi-note">Edit the quotation document details for the selected project.</div></div>
+     <div class="muted">${esc(p.name)}</div>
+   </div>
+   <div class="formgrid">
+     <div class="field"><label>BOQ Ref No</label><input id="boqDocRefNo" placeholder="BOQ-0001"></div>
+     <div class="field"><label>Date of Issue</label><input id="boqDocDate" type="date"></div>
+     <div class="field"><label>Validity Period</label><input id="boqDocValidity" placeholder="30 Days"></div>
+     <div class="field"><label>Prepared By</label><input id="boqDocPreparedBy" placeholder="Prepared by name / company"></div>
+   </div>
+   <div class="toolbar" style="margin:10px 0 0">
+     <div class="kpi-note">These values appear in the quotation under “BOQ DOCUMENT REFERENCE”.</div>
+     <div class="toolbar-right"><button class="btn small" onclick="resetBOQDocumentReference()">Reset</button><button class="btn small primary" onclick="saveBOQDocumentReference()">Save Document Reference</button></div>
+   </div>
+ </div>
+
+ <div class="boq-action-bar-v15">
+   <button class="btn" onclick="openRoomModal()">+ Room</button>
+   <button class="btn primary" onclick="openCabinetModal()">+ Cabinet</button>
+   <button class="btn" onclick="openStandaloneHardwareModalV9()">+ Hardware</button>
+ </div>
+
+ <div class="room-tabs">${roomTabs}</div>
+
+
+ <div class="card">
+   <div class="toolbar">
+     <div class="muted">${esc(db.selectedRoom)} • ${items.length} items</div>
+     <div class="toolbar-right"><button class="btn small" onclick="addGenericItem()">+ Other Item</button></div>
+   </div>
+   ${items.length?`<table><thead><tr>
+      <th>Item</th><th>Dimensions</th><th>Qty</th><th>Bill Qty</th><th>Unit</th><th class="num">Rate</th><th class="num">Amount</th><th></th>
+    </tr></thead><tbody>`+
+      items.map(i=>`<tr>
+        <td>
+          <b>${esc(i.type)}</b>
+          <div class="quote-material-tags">
+            ${i.finish?`<span class="quote-material-tag">${esc(i.finish)}</span>`:""}
+            ${i.materialGrade?`<span class="quote-material-tag">${esc(i.materialGrade)}</span>`:""}
+          </div>
+          ${i.customDescription?`<div style="font-size:11px;margin-top:3px">${esc(i.customDescription)}</div>`:""}
+          ${((db.boqHardware||[]).filter(h=>h.cabinetId===i.id)).length?`<div class="muted" style="font-size:11px;margin-top:3px">
+            Hardware: ${esc((db.boqHardware||[]).filter(h=>h.cabinetId===i.id).map(h=>`${h.name} × ${h.quantity}`).join(", "))}
+          </div>`:""}
+        </td>
+        <td>${i.width?`${i.width} × ${i.height} × ${i.depth} mm`:"—"}</td>
+        <td>${i.qty}</td><td>${Number(i.billQty).toFixed(2)}</td><td>${esc(i.unit)}</td>
+        <td class="num">${money(i.rate)}</td><td class="num">${money(i.amount)}</td>
+        <td class="num"><button class="btn small" onclick="openCabinetModal('${i.id}')">Edit</button>
+        <button class="btn small danger" onclick="deleteBOQ('${i.id}')">Delete</button></td>
+      </tr>`).join("")+
+      `</tbody></table>`:
+      `<div class="empty">No BOQ items in this room. Add a cabinet to start.</div>`}
+
+   <div style="margin-top:16px">
+     <div class="toolbar" style="margin:0 0 8px">
+       <div><b>Room Hardware</b><div class="kpi-note">Hardware added directly to this area/room appears here.</div></div>
+     </div>
+     <div class="standalone-hardware-list-v9">
+       ${((db.boqHardwareStandalone||[]).filter(h=>h.projectId===p.id&&h.room===db.selectedRoom)).length
+         ? `<table><thead><tr><th>Hardware</th><th>Brand</th><th>Qty</th><th>Unit</th><th class="num">Rate</th><th class="num">Amount</th><th></th></tr></thead><tbody>${
+             (db.boqHardwareStandalone||[]).filter(h=>h.projectId===p.id&&h.room===db.selectedRoom).map(h=>`<tr>
+               <td><b>${esc(h.name)}</b>${h.notes?`<div class="muted">${esc(h.notes)}</div>`:""}</td>
+               <td>${esc(h.brand||"")}</td><td>${Number(h.quantity).toFixed(2)}</td><td>${esc(h.unit||"")}</td>
+               <td class="num">${money(h.rate)}</td><td class="num">${money(h.amount)}</td>
+               <td class="num"><button class="btn small danger" onclick="deleteStandaloneHardwareV9('${h.id}')">Delete</button></td>
+             </tr>`).join("")
+           }</tbody></table>`
+         : `<div class="empty">No standalone hardware in this area.</div>`}
+     </div>
+   </div>
+
+   <div class="summary">
+     <div>
+       <div class="muted">Room total</div>
+       <div class="total">${money(items.reduce((a,b)=>a+b.amount,0))}</div>
+       <div class="kpi-note">Includes cabinet rates + selected hardware</div>
+     </div>
+   </div>
+
+ <div class="card boq-commercial-panel-v17" style="margin:16px 0 0">
+   <div class="toolbar" style="margin:0 0 10px">
+     <div>
+       <b>GST & Discount</b>
+       <div class="kpi-note">Apply commercial adjustments to the selected project's quotation.</div>
+     </div>
+     <div class="kpi-note">${(+p.boqDiscountRate||0)>0 ? "Discount applied — Super Admin approval is required before printing." : "Discount is optional."}</div>
+   </div>
+   <div class="formgrid">
+     <div class="field">
+       <label>GST (%)</label>
+       <input id="boqGSTRate" type="number" oninput="updateBOQCommercialLivePreviewV17()" min="0" max="100" step="0.01" value="${Number(p.boqGSTRate||0)}" placeholder="18">
+     </div>
+     <div class="field">
+       <label>Discount (%)</label>
+       <input id="boqDiscountRate" type="number" oninput="updateBOQCommercialLivePreviewV17()" min="0" max="100" step="0.01" value="${Number(p.boqDiscountRate||0)}" placeholder="0">
+     </div>
+   </div>
+   <div id="boqCommercialLiveTotalV17" class="boq-commercial-live-v17">Commercial total preview</div>
+   <div class="toolbar" style="margin:10px 0 0">
+     <div class="kpi-note">Changing GST or discount changes the quotation total. Any changed commercial value resets BOQ approval to Draft; discount requires Super Admin approval before printing.</div>
+     <div class="toolbar-right">
+       <button class="btn small" onclick="resetBOQCommercialAdjustments()">Reset</button>
+       <button class="btn small primary" onclick="saveBOQCommercialAdjustments()">Save GST & Discount</button>
+     </div>
+   </div>
+ </div>
+
+ </div>`;
+ updateBOQCommercialLivePreviewV17();
+}
+function selectBOQProjectV14(projectId){
+  const p=db.projects.find(x=>x.id===projectId);
+  if(!p)return;
+  db.selectedProjectId=projectId;
+  db.selectedRoom=(p.rooms&&p.rooms.length?p.rooms[0]:"General");
+  db.boqProjectSearch="";
+  localStorage.setItem(KEY,JSON.stringify(db));
+  renderAll();
+} 
+function clearBOQProjectSearchV16(){
+  db.boqProjectSearch="";
+  save();
+  const input=document.getElementById("boqProjectSearchV14");
+  if(input)input.value="";
+  renderBOQProjectSearchResultsV16("",true);
+  const count=document.getElementById("boqProjectSearchCountV14");
+  if(count)count.textContent=`${db.projects.length} project${db.projects.length===1?"":"s"}`;
+}
+
+function chooseRoom(r){db.selectedRoom=r;save()}
+function openRoomModal(){let p=project();openModal(`<h2>Add Room</h2><div class="form"><div class="field"><label>Room / Area name</label><input id="roomName" placeholder="Kitchen"></div></div><div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveRoom()">Add Room</button></div>`)}
+function saveRoom(){let n=document.getElementById("roomName").value.trim();if(!n)return alert("Enter a room name.");let p=project();p.rooms=p.rooms||[];if(!p.rooms.includes(n))p.rooms.push(n);db.selectedRoom=n;save();closeModal()}
+function cabinetOptions(selected){let types=[...new Set(db.rates.map(r=>r.type))];return types.map(x=>`<option ${x===selected?"selected":""}>${esc(x)}</option>`).join("")}
+function finishOptions(type,selected){
+  let finishes=finishMasterList();
+  if(selected&&!finishes.some(x=>x===selected))finishes=[selected,...finishes];
+  if(!finishes.length)finishes=[selected||""];
+  return finishes.filter(Boolean).map(x=>`<option ${x===selected?"selected":""}>${esc(x)}</option>`).join("");
+}
+
+function hardwareByIdV7(id){return (db.hardware||[]).find(h=>h.id===id)||null}
+function hardwareOptionsV7(selected){
+  return (db.hardware||[]).map(h=>`<option value="${h.id}" ${h.id===selected?"selected":""}>${esc(h.name)}${h.brand?" • "+esc(h.brand):""}</option>`).join("");
+}
+function currentCabHardwareV7(){
+  const box=document.getElementById("cabHardware");
+  if(!box)return [];
+  return [...box.querySelectorAll(".hardware-line")].map(row=>{
+    return {
+      hardwareId:row.querySelector(".hw-select").value,
+      quantity:+row.querySelector(".hw-qty").value||0,
+      rate:+row.querySelector(".hw-rate").value||0,
+      notes:row.querySelector(".hw-notes").value||""
+    };
+  }).filter(x=>x.hardwareId);
+}
+function refreshCabHardwareTotalV7(){
+  const total=currentCabHardwareV7().reduce((a,x)=>a+(x.quantity*x.rate),0);
+  const el=document.getElementById("cabHardwareTotal");
+  if(el)el.textContent=`Hardware total: ${money(total)}`;
+  const empty=document.getElementById("cabHardwareEmpty");
+  if(empty)empty.textContent=(db.hardware||[]).length?"":"No hardware items in Hardware Master. Add them there first.";
+}
+function addCabHardwareLineV7(data={}){
+  const box=document.getElementById("cabHardware");
+  if(!box)return;
+  const selected=data.hardwareId||(db.hardware||[])[0]?.id||"";
+  const h=hardwareByIdV7(selected)||{};
+  const row=document.createElement("div");
+  row.className="hardware-line";
+  row.innerHTML=`<div class="field"><label>Hardware</label><select class="hw-select">${hardwareOptionsV7(selected)}</select></div>
+    <div class="field"><label>Notes</label><input class="hw-notes" value="${esc(data.notes||"")}"></div>
+    <div class="field"><label>Qty</label><input class="hw-qty" type="number" min="0" step="1" value="${data.quantity??1}"></div>
+    <div class="field"><label>Rate / Unit</label><input class="hw-rate" type="number" min="0" step="0.01" value="${data.rate??(h.rate||0)}"></div>
+    <button type="button" class="btn small hardware-delete" onclick="this.parentElement.remove();refreshCabHardwareTotalV7()">×</button>`;
+  box.appendChild(row);
+  row.querySelector(".hw-select").onchange=()=>{
+    const nh=hardwareByIdV7(row.querySelector(".hw-select").value)||{};
+    if(!data.rate)row.querySelector(".hw-rate").value=nh.rate||0;
+    refreshCabHardwareTotalV7();
+  };
+  row.querySelector(".hw-qty").oninput=refreshCabHardwareTotalV7;
+  row.querySelector(".hw-rate").oninput=refreshCabHardwareTotalV7;
+  refreshCabHardwareTotalV7();
+}
+function renderCabHardwareV7(items=[]){
+  const box=document.getElementById("cabHardware");
+  if(!box)return;
+  box.innerHTML="";
+  if(items.length)items.forEach(addCabHardwareLineV7);
+  refreshCabHardwareTotalV7();
+}
+function totalHardwareV7(items){
+  return (items||[]).reduce((a,h)=>a+(+h.quantity||0)*(+h.rate||0),0);
+}
+function replaceCabHardwareInBOQV7(cabinetId,hardwareItems){
+  db.boqHardware=(db.boqHardware||[]).filter(x=>x.cabinetId!==cabinetId);
+  hardwareItems.forEach(h=>{
+    const master=hardwareByIdV7(h.hardwareId);
+    db.boqHardware.push({
+      id:uid("bh"),cabinetId,projectId:project().id,room:db.selectedRoom,
+      hardwareId:h.hardwareId,name:master?.name||"Hardware",brand:master?.brand||"",
+      unit:master?.unit||"",quantity:+h.quantity||0,rate:+h.rate||0,
+      amount:(+h.quantity||0)*(+h.rate||0),notes:h.notes||""
+    });
+  });
+}
+
+
+function openStandaloneHardwareModalV9(id){
+  if(!hasPermissionV6("hardware") && !isSuperAdminV6()){
+    alert("You do not have access to Hardware. Ask Super Admin to grant Hardware Master / Hardware access.");
+    return;
+  }
+  const h=(db.boqHardwareStandalone||[]).find(x=>x.id===id)||{};
+  const first=(db.hardware||[])[0]||{};
+  const selected=h.hardwareId||first.id||"";
+  const hw=hardwareByIdV7(selected)||first;
+  openModal(`<h2>${id?"Edit":"Add"} Hardware</h2>
+    <div class="formgrid">
+      <div class="field"><label>Hardware</label><select id="shwItemV9">${hardwareOptionsV7(selected)}</select></div>
+      <div class="field"><label>Quantity</label><input id="shwQtyV9" type="number" min="0" step="1" value="${h.quantity??1}"></div>
+      <div class="field"><label>Rate / Unit</label><input id="shwRateV9" type="number" min="0" step="0.01" value="${h.rate??(hw.rate||0)}"></div>
+      <div class="field"><label>Notes</label><input id="shwNotesV9" value="${esc(h.notes||"")}"></div>
+    </div>
+    <div class="kpi-note" style="margin-top:10px">This hardware is added directly to the selected Area / Room.</div>
+    <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveStandaloneHardwareV9('${id||""}')">Save Hardware</button></div>`);
+  document.getElementById("shwItemV9").onchange=()=>{
+    const nh=hardwareByIdV7(document.getElementById("shwItemV9").value)||{};
+    if(!h.rate)document.getElementById("shwRateV9").value=nh.rate||0;
+  };
+}
+function saveStandaloneHardwareV9(id){
+  const hs=(db.hardware||[]), hid=document.getElementById("shwItemV9").value, master=hardwareByIdV7(hid);
+  if(!master)return alert("Select a hardware item.");
+  const q=+document.getElementById("shwQtyV9").value||0;
+  const rate=+document.getElementById("shwRateV9").value||0;
+  const obj={id:id||uid("sh"),projectId:project().id,room:db.selectedRoom,hardwareId:hid,
+    name:master.name,brand:master.brand||"",unit:master.unit||"Nos",quantity:q,rate,amount:q*rate,
+    notes:document.getElementById("shwNotesV9").value||""};
+  const ix=(db.boqHardwareStandalone||[]).findIndex(x=>x.id===obj.id);
+  if(ix>=0)db.boqHardwareStandalone[ix]=obj; else db.boqHardwareStandalone.push(obj);
+  resetBOQToDraftV6();save();closeModal();
+}
+function deleteStandaloneHardwareV9(id){
+  if(!confirm("Delete this hardware item?"))return;
+  db.boqHardwareStandalone=(db.boqHardwareStandalone||[]).filter(x=>x.id!==id);
+  resetBOQToDraftV6();save();
+}
+
+function openCabinetModal(id){
+ let item=db.boq.find(x=>x.id===id);
+ let type=item?.type||"Base Cabinet",finish=item?.finish||"Laminate",grade=item?.materialGrade||"MR Ply";
+ let r=rateFor(type,finish,grade)||defaultRates[0];
+ openModal(`<h2>${item?"Edit":"Add"} Cabinet</h2>
+ <div class="formgrid">
+  <div class="field"><label>Cabinet Type</label><select id="cabType">${cabinetMasterList().map(x=>`<option ${x===type?"selected":""}>${esc(x)}</option>`).join("")}</select></div>
+  <div class="field"><label>Finish</label><select id="cabFinish">${finishOptions(type,finish)}</select></div>
+  <div class="field"><label>Material Grade</label><select id="cabGrade">${gradeOptions(type,finish,grade)}</select></div>
+  <div class="field"><label>Quantity</label><input id="cabQty" type="number" min="0" step="1" value="${item?.qty??1}"></div>
+  <div class="field"><label>Width (mm)</label><input id="cabW" type="number" min="0" value="${item?.width??2400}"></div>
+  <div class="field"><label>Height (mm)</label><input id="cabH" type="number" min="0" value="${item?.height??720}"></div>
+  <div class="field"><label>Depth (mm)</label><input id="cabD" type="number" min="0" value="${item?.depth??560}"></div>
+  <div class="field"><label>Shutter</label><select id="cabShutter"><option ${item?.shutter!=="No"?"selected":""}>Yes</option><option ${item?.shutter==="No"?"selected":""}>No</option></select></div>
+  <div class="field"><label>No. of Shutters</label><input id="cabShutters" type="number" min="0" value="${item?.shutters??1}"></div>
+  <div class="field"><label>No. of Drawers</label><input id="cabDrawers" type="number" min="0" value="${item?.drawers??0}"></div>
+ </div>
+ <div class="field" style="margin-top:12px"><label>Remarks</label><textarea id="cabNotes" rows="2">${esc(item?.notes||"")}</textarea></div>
+ <div class="field" style="margin-top:12px"><label>Custom Description (optional)</label><textarea id="cabCustomDescription" rows="3" placeholder="Enter your own BOQ description. Leave blank to use the automatic description.">${esc(item?.customDescription||"")}</textarea><div class="boq-custom-desc-note-v16">This description will be used in the BOQ/quotation when provided. Material grade is still used for rate selection but does not appear in the BOQ Builder description.</div></div>
+
+ <div style="margin-top:14px">
+   <div class="toolbar" style="margin:0 0 6px 0">
+     <div><b>Hardware</b><div class="kpi-note">Add cabinet-specific hardware without calculating raw material quantities.</div></div>
+     <button class="btn small" onclick="addCabHardwareLineV7()">+ Hardware</button>
+   </div>
+   <div id="cabHardware"></div><div id="cabHardwareEmpty" class="kpi-note" style="margin-top:6px"></div>
+   <div id="cabHardwareTotal" class="hardware-total" style="margin-top:8px"></div>
+ </div>
+
+ <div class="card" style="margin-top:14px;background:#10161e">
+   <div class="muted">Material & Finish</div>
+   <div id="materialDescription" style="font-size:14px;line-height:1.5;margin-top:6px"></div>
+ </div>
+ <div class="card" style="margin-top:14px;background:#10161e">
+   <div class="muted">Matched BOQ Rate</div>
+   <div id="ratePreview" style="font-size:18px;margin-top:4px">${money(r?.rate||0)} / ${esc(r?.unit||"")}</div>
+   <div id="rateBreakdown" class="kpi-note">${esc(type)} • ${esc(finish)} • ${esc(grade)}</div>
+   <div class="kpi-note">Rate is determined by cabinet type + finish + material grade.</div>
+ </div>
+ <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveCabinet('${id||""}')">${item?"Save Changes":"Add to BOQ"}</button></div>`);
+ document.getElementById("cabType").onchange=syncCabinetSelections;
+ document.getElementById("cabFinish").onchange=syncCabinetSelections;
+ document.getElementById("cabGrade").onchange=updateRatePreview;
+ updateRatePreview();
+ renderCabHardwareV7((db.boqHardware||[]).filter(h=>h.cabinetId===id));
+}
+function syncCabinetSelections(){
+  const t=document.getElementById("cabType").value;
+  const f=document.getElementById("cabFinish").value;
+  document.getElementById("cabFinish").innerHTML=finishOptions(t,f);
+  const nf=document.getElementById("cabFinish").value;
+  const oldGrade=document.getElementById("cabGrade").value;
+  document.getElementById("cabGrade").innerHTML=gradeOptions(t,nf,oldGrade);
+  updateRatePreview();
+}
+function updateRatePreview(){
+  const t=document.getElementById("cabType").value;
+  const f=document.getElementById("cabFinish").value;
+  const g=document.getElementById("cabGrade").value;
+  const r=rateFor(t,f,g)||{};
+  document.getElementById("ratePreview").textContent=`${money(r.rate||0)} / ${r.unit||""}`;
+  document.getElementById("rateBreakdown").textContent=`${t} • ${f} • ${g}`;
+  document.getElementById("materialDescription").textContent=materialFinishDescription(t,f,g);
+}
+
+
+function approvalBadgeV6(status){
+  const s=status||"Draft";
+  const cls=s==="Approved"?"approval-approved":(s==="Awaiting Approval"||s==="Pending BOQ Approval")?"approval-awaiting":s==="Rejected"?"approval-rejected":"approval-draft";
+  return `<span class="approval-badge ${cls}">${esc(s)}</span>`;
+}
+function resetBOQToDraftV6(){
+  const p=project();if(!p)return;
+  p.boqApprovalStatus="Draft";p.boqApprovedBy=null;p.boqApprovedAt=null;p.boqApprovalNote="";
+}
+function submitBOQForApprovalV6(){
+  const p=project();if(!p)return;
+  const count=db.boq.filter(x=>x.projectId===p.id).length;
+  if(!count){alert("Add at least one BOQ item before submitting.");return}
+  p.boqApprovalStatus="Awaiting Approval";p.boqApprovedBy=null;p.boqApprovedAt=null;p.boqApprovalNote="";
+  save();
+}
+function approveBOQV6(){
+  if(!isSuperAdminV6())return;
+  const p=project();if(!p)return;
+  p.boqApprovalStatus="Approved";p.boqApprovedBy=currentUserV6().displayName;p.boqApprovedAt=new Date().toISOString();p.boqApprovalNote="";
+  save();
+}
+function approveBOQProjectV6(projectId){
+  if(!isSuperAdminV6())return;
+  const p=db.projects.find(x=>x.id===projectId);if(!p)return;
+  const count=db.boq.filter(x=>x.projectId===p.id).length;
+  if(!count){alert("Add at least one BOQ item before approval.");return}
+  if(p.boqApprovalStatus!=="Awaiting Approval")return;
+  p.boqApprovalStatus="Approved";p.boqApprovedBy=currentUserV6().displayName;p.boqApprovedAt=new Date().toISOString();p.boqApprovalNote="";
+  save();
+}
+function rejectBOQProjectV6(projectId){
+  if(!isSuperAdminV6())return;
+  const p=db.projects.find(x=>x.id===projectId);if(!p)return;
+  if(p.boqApprovalStatus!=="Awaiting Approval")return;
+  const note=prompt("Reason for rejection (optional):","");
+  p.boqApprovalStatus="Rejected";p.boqApprovedBy=currentUserV6().displayName;p.boqApprovedAt=new Date().toISOString();p.boqApprovalNote=note||"";
+  save();
+}
+function rejectBOQV6(){
+  if(!isSuperAdminV6())return;
+  const p=project();if(!p)return;
+  const note=prompt("Reason for rejection (optional):","");
+  p.boqApprovalStatus="Rejected";p.boqApprovedBy=currentUserV6().displayName;p.boqApprovedAt=new Date().toISOString();p.boqApprovalNote=note||"";
+  save();
+}
+function printBOQV6(){
+  if(!printUnlockedV6()){alert("Printing is locked. A Super Admin must approve this BOQ first.");return}
+  window.print();
+}
+
+function saveCabinet(id){
+ let type=document.getElementById("cabType").value;
+ let finish=document.getElementById("cabFinish").value;
+ let grade=document.getElementById("cabGrade").value;
+ let q=+document.getElementById("cabQty").value||0;
+ let w=+document.getElementById("cabW").value||0;
+ let h=+document.getElementById("cabH").value||0;
+ let d=+document.getElementById("cabD").value||0;
+ let hardwareItems=currentCabHardwareV7();
+ let r=rateFor(type,finish,grade);
+ if(!r)return alert("No rate exists for this cabinet / finish / material grade.");
+ let bill=calc(r.formula,w,h,d,q);
+ let description=materialFinishDescription(type,finish,grade);
+ let customDescription=(document.getElementById("cabCustomDescription")?.value||"").trim();
+ let hardwareTotal=totalHardwareV7(hardwareItems);
+ let obj={
+   id:id||uid("b"),
+   projectId:project().id,
+   room:db.selectedRoom,
+   type,finish,materialGrade:grade,
+   description,
+   customDescription,
+   qty:q,width:w,height:h,depth:d,
+   shutter:document.getElementById("cabShutter").value,
+   shutters:+document.getElementById("cabShutters").value||0,
+   drawers:+document.getElementById("cabDrawers").value||0,
+   notes:document.getElementById("cabNotes").value,
+   billQty:bill,unit:r.unit,rate:+r.rate||0,amount:bill*(+r.rate||0)+hardwareTotal,baseAmount:bill*(+r.rate||0),hardwareTotal
+ };
+ let ix=db.boq.findIndex(x=>x.id===obj.id);
+ if(ix>=0)db.boq[ix]=obj; else db.boq.push(obj);
+ replaceCabHardwareInBOQV7(obj.id,hardwareItems);resetBOQToDraftV6();save();closeModal();
+}
+
+function deleteBOQ(id){const item=db.boq.find(x=>x.id===id);if(!item)return;if(confirm(`Delete ${item.type} from ${item.room}?`)){db.boq=db.boq.filter(x=>x.id!==id);save()}}
+function addGenericItem(){let p=project();openModal(`<h2>Add Other BOQ Item</h2><div class="formgrid"><div class="field"><label>Item</label><input id="gName" placeholder="False Ceiling"></div><div class="field"><label>Quantity</label><input id="gQty" type="number" value="1"></div><div class="field"><label>Unit</label><select id="gUnit"><option>Nos</option><option>Rft</option><option>Sqft</option><option>Sqm</option><option>Set</option></select></div><div class="field"><label>Rate</label><input id="gRate" type="number" value="0"></div></div><div class="field" style="margin-top:12px"><label>Custom Description</label><textarea id="gDescription" rows="3" placeholder="Enter BOQ description"></textarea></div><div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveGeneric()">Add</button></div>`)}
+function saveGeneric(){let n=document.getElementById("gName").value.trim();if(!n)return alert("Enter item name.");let q=+document.getElementById("gQty").value||0,r=+document.getElementById("gRate").value||0,desc=(document.getElementById("gDescription")?.value||"").trim();db.boq.push({id:uid("g"),projectId:project().id,room:db.selectedRoom,type:n,finish:"",qty:q,width:0,height:0,depth:0,billQty:q,unit:document.getElementById("gUnit").value,rate:r,amount:q*r,notes:"",description:desc,customDescription:desc,itemKind:"other"});resetBOQToDraftV6();save();closeModal()}
+
+function openClientModal(id){let c=db.clients.find(x=>x.id===id)||{};openModal(`<h2>${id?"Edit":"New"} Client</h2><div class="formgrid"><div class="field"><label>Name</label><input id="cName" value="${esc(c.name||"")}"></div><div class="field"><label>Company</label><input id="cCompany" value="${esc(c.company||"")}"></div><div class="field"><label>Phone</label><input id="cPhone" value="${esc(c.phone||"")}"></div><div class="field"><label>Email</label><input id="cEmail" value="${esc(c.email||"")}"></div></div><div class="field" style="margin-top:12px"><label>Address</label><textarea id="cAddress">${esc(c.address||"")}</textarea></div><div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveClient('${id||""}')">Save</button></div>`)}
+function saveClient(id){let n=document.getElementById("cName").value.trim();if(!n)return alert("Enter client name.");let obj={id:id||uid("c"),name:n,company:document.getElementById("cCompany").value,phone:document.getElementById("cPhone").value,email:document.getElementById("cEmail").value,address:document.getElementById("cAddress").value};let ix=db.clients.findIndex(x=>x.id===obj.id);if(ix>=0)db.clients[ix]=obj;else db.clients.push(obj);save();closeModal()}
+function deleteClient(id){if(!hasPermissionV6("clients")&&!isSuperAdminV6())return alert("You do not have access to Clients.");const c=db.clients.find(x=>x.id===id);if(!c)return;const linked=(db.projects||[]).filter(p=>p.clientId===id);if(linked.length)return alert(`Cannot delete “${c.name}” because ${linked.length} project${linked.length===1?" is":"s are"} linked to this client. Reassign or delete the project${linked.length===1?"":"s"} first.`);if(!confirm(`Delete client “${c.name}”? This action cannot be undone.`))return;db.clients=db.clients.filter(x=>x.id!==id);save();showView("clients")}
+
+function openProjectModal(id){let p=db.projects.find(x=>x.id===id)||{};let clientOpts=db.clients.map(c=>`<option value="${c.id}" ${c.id===p.clientId?"selected":""}>${esc(c.name)}</option>`).join("");openModal(`<h2>${id?"Edit":"New"} Project</h2><div class="formgrid"><div class="field"><label>Project Name</label><input id="pName" value="${esc(p.name||"")}"></div><div class="field"><label>Client</label><select id="pClient">${clientOpts}</select></div><div class="field"><label>Project Type</label><select id="pType">${["Residential","Apartment","Villa","Independent House","Office","Retail","Restaurant","Commercial","Other"].map(x=>`<option ${x===(p.type||"Residential")?"selected":""}>${x}</option>`).join("")}</select></div><div class="field"><label>Project Area</label><input id="pAreaV9" value="${esc(p.projectArea||"")}" placeholder="2,450 sq.ft"></div><div class="field"><label>Status</label><select id="pStatus">${["Estimation","Quotation","Approved","Production","Installation","Completed"].map(x=>`<option ${x===(p.status||"Estimation")?"selected":""}>${x}</option>`).join("")}</select></div></div><div class="field" style="margin-top:12px"><label>Site Address</label><textarea id="pAddress">${esc(p.address||"")}</textarea></div><div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveProject('${id||""}')">Save</button></div>`)}
+function saveProject(id){let n=document.getElementById("pName").value.trim();if(!n)return alert("Enter project name.");let old=db.projects.find(x=>x.id===id);let obj={...(old||{}),id:id||uid("p"),createdAt:old?.createdAt||new Date().toISOString(),clientId:document.getElementById("pClient").value,name:n,type:document.getElementById("pType").value,projectArea:document.getElementById("pAreaV9").value,status:document.getElementById("pStatus").value,address:document.getElementById("pAddress").value,rooms:old?.rooms||["Kitchen"]};let ix=db.projects.findIndex(x=>x.id===obj.id);if(ix>=0)db.projects[ix]=obj;else{db.projects.push(obj);db.selectedProjectId=obj.id;db.selectedRoom=obj.rooms[0]}ensureProjectAccountsV13();save();closeModal()}
+
+function openRateModal(id){
+ let r=db.rates.find(x=>x.id===id)||{};
+ let types=[...new Set([...cabinetMasterList(),...db.rates.map(x=>x.type)])];
+ openModal(`<h2>${id?"Edit":"Add"} Rate</h2>
+ <div class="formgrid">
+  <div class="field"><label>Cabinet Type</label><select id="rType">${types.map(x=>`<option ${x===(r.type||"Base Cabinet")?"selected":""}>${esc(x)}</option>`).join("")}</select></div>
+  <div class="field"><label>Finish</label><select id="rFinish">${(()=>{let arr=finishMasterList();let sel=r.finish||arr[0]||"";if(sel&&!arr.includes(sel))arr=[sel,...arr];return arr.map(x=>`<option ${x===sel?"selected":""}>${esc(x)}</option>`).join("")})()}</select></div>
+  <div class="field"><label>Material Grade</label><select id="rGrade">${(()=>{let arr=materialMasterList();let sel=r.materialGrade||arr[0]||"";if(sel&&!arr.includes(sel))arr=[sel,...arr];return arr.map(x=>`<option ${x===sel?"selected":""}>${esc(x)}</option>`).join("")})()}</select></div>
+  <div class="field"><label>Billing Unit</label><select id="rUnit">${["Rft","Sqft","Nos","Rm","Sqm","Set"].map(x=>`<option ${x===(r.unit||"Rft")?"selected":""}>${x}</option>`).join("")}</select></div>
+  <div class="field"><label>Formula</label><select id="rFormula">${["width/304.8","width*height/92903.04","qty","width*depth/92903.04"].map(x=>`<option ${x===(r.formula||"width/304.8")?"selected":""}>${x}</option>`).join("")}</select></div>
+  <div class="field"><label>Rate</label><input id="rRate" type="number" min="0" step="0.01" value="${r.rate??0}"></div>
+ </div>
+ <div class="kpi-note" style="margin-top:10px">Rate is stored for the exact combination of cabinet type + finish + material grade.</div>
+ <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveRate('${id||""}')">Save</button></div>`)
+}
+
+function saveRate(id){
+ let obj={
+   id:id||uid("r"),
+   type:document.getElementById("rType").value,
+   finish:document.getElementById("rFinish").value,
+   materialGrade:document.getElementById("rGrade").value,
+   unit:document.getElementById("rUnit").value,
+   formula:document.getElementById("rFormula").value,
+   rate:+document.getElementById("rRate").value||0
+ };
+ let ix=db.rates.findIndex(x=>x.id===obj.id);
+ if(ix<0) ix=db.rates.findIndex(x=>x.type===obj.type&&x.finish===obj.finish&&x.materialGrade===obj.materialGrade);
+ if(ix>=0){obj.id=db.rates[ix].id;db.rates[ix]=obj;} else db.rates.push(obj);
+ syncBOQRates();
+ save();closeModal()
+}
+function syncBOQRates(){
+ db.boq.forEach(i=>{
+   const r=rateFor(i.type,i.finish,i.materialGrade||"MR Ply");
+   if(r){
+     i.unit=r.unit;
+     i.rate=+r.rate||0;
+     i.description=materialFinishDescription(i.type,i.finish||"",i.materialGrade||"");
+     i.billQty=calc(r.formula,i.width||0,i.height||0,i.depth||0,i.qty||0);
+     i.baseAmount=i.billQty*i.rate;
+     i.hardwareTotal=totalHardwareV7((db.boqHardware||[]).filter(h=>h.cabinetId===i.id));
+     i.amount=i.baseAmount+i.hardwareTotal;
+   }
+ });
+}
+
+function renderRates(){document.getElementById("ratesTable").innerHTML=`<table><thead><tr><th>Cabinet</th><th>Finish</th><th>Material Grade</th><th>Unit</th><th>Formula</th><th class="num">Rate</th><th></th></tr></thead><tbody>`+db.rates.map(r=>`<tr><td><b>${esc(r.type)}</b></td><td>${esc(r.finish)}</td><td>${esc(r.materialGrade||"MR Ply")}</td><td>${esc(r.unit)}</td><td><code>${esc(r.formula)}</code></td><td class="num">${money(r.rate)}</td><td class="num"><button class="btn small" onclick="openRateModal('${r.id}')">Edit</button></td></tr>`).join("")+"</tbody></table>"}
+
+
+
+
+
+
+
+
+function printBOQExactV13AutoScale(){
+  if(typeof printUnlockedV6==="function" && !printUnlockedV6()){
+    alert("Printing is locked until Super Admin approval.");
+    return;
+  }
+  renderQuotation();
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>window.print());
+  });
+}
+
+function renderQuotation(){
+ let el=document.getElementById("quotationScreen"),p=project();
+ if(!p){el.innerHTML='<div class="empty">Select a project to generate a BOQ.</div>';return}
+
+ let c=db.clients.find(x=>x.id===p.clientId);
+ let company={...DEFAULT_COMPANY,...(db.company||{})};
+
+ let cabinets=(db.boq||[]).filter(x=>x.projectId===p.id);
+ let linkedHardware=(db.boqHardware||[]).filter(h=>h.projectId===p.id);
+ let standaloneHardware=(db.boqHardwareStandalone||[]).filter(h=>h.projectId===p.id);
+ let allHardware=[...linkedHardware,...standaloneHardware];
+
+ let cabinetGrandTotal=cabinets.reduce((sum,i)=>sum+(+(i.baseAmount??i.amount)||0),0);
+ let hardwareGrandTotal=allHardware.reduce((sum,h)=>sum+(+h.amount||0),0);
+ let commercial=projectCommercialTotalsV13(p.id);
+ let grandTotal=commercial.grandTotal;
+
+ let boqNumber=getProjectBOQNumber(p);
+ let dateText=new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"long",year:"numeric"});
+ let docRef=getBOQDocumentReference(p,boqNumber,dateText,company);
+
+ let roomNames=(p.rooms||[]).filter(r=>cabinets.some(i=>i.room===r)||standaloneHardware.some(h=>h.room===r));
+ let extraRooms=[...new Set([...cabinets.map(i=>i.room),...standaloneHardware.map(h=>h.room)])].filter(r=>!roomNames.includes(r));
+ let roomOrder=[...roomNames,...extraRooms];
+
+ function splitDescription(desc){
+   desc=String(desc||"").replace(/\s+/g," ").trim();
+   if(!desc)return ["",""];
+
+   // Compact quotation descriptions into exactly two visible lines.
+   // Keep the complete wording and split only at word boundaries.
+   const words=desc.split(" ");
+   if(words.length===1)return [words[0],""];
+   const target=Math.ceil(words.length/2);
+   let best=target;
+   let bestScore=Infinity;
+   for(let i=Math.max(1,target-4);i<=Math.min(words.length-1,target+4);i++){
+     const a=words.slice(0,i).join(" ");
+     const b=words.slice(i).join(" ");
+     const score=Math.abs(a.length-b.length);
+     if(score<bestScore){best=i;bestScore=score;}
+   }
+   return [words.slice(0,best).join(" "),words.slice(best).join(" ")];
+ }
+
+ let sectionNo=0;
+ let bodyRows="";
+
+ // FIRST: all room/area details. Hardware is deliberately not printed here.
+ roomOrder.forEach(room=>{
+   sectionNo++;
+   const roomCabinets=cabinets.filter(i=>i.room===room);
+   const roomCabinetTotal=roomCabinets.reduce((sum,i)=>sum+(+(i.baseAmount??i.amount)||0),0);
+
+   bodyRows+=`<tr class="template-section-row"><td colspan="7">${sectionNo}. ${esc(room)}</td></tr>
+   <tr class="template-colhead">
+     <th>ITEM</th><th>DESCRIPTION OF WORK</th><th>QTY</th><th>UNIT</th>
+     <th>RATE (${esc(db.currency||"₹")})</th><th>AMOUNT (${esc(db.currency||"₹")})</th><th>AREA</th>
+   </tr>`;
+
+   let itemNo=0;
+   roomCabinets.forEach(i=>{
+     itemNo++;
+     const isOtherItem=!isCabinetBOQItem(i);
+     const desc=isOtherItem?(i.customDescription||""):(i.customDescription||materialFinishDescription(i.type,i.finish||"",i.materialGrade||"MR Ply")||i.type||"");
+     const [d1,d2]=splitDescription(desc);
+     const cabinetAmount=+(i.baseAmount??i.amount)||0;
+
+     bodyRows+=`<tr class="template-item-row">
+       <td>${sectionNo}.${itemNo}</td>
+       <td>
+         <b>${esc(i.type)}</b>
+         ${desc?`<div class="template-desc">
+           <span>${esc(d1)}</span>
+           <span>${esc(d2)}</span>
+         </div>`:""}
+         ${!isOtherItem?`<div class="template-spec">${[i.finish,i.materialGrade].filter(Boolean).map(esc).join(" • ")}</div>`:""}
+       </td>
+       <td>${Number(i.billQty).toFixed(2)}</td>
+       <td>${esc(i.unit)}</td>
+       <td>${money(i.rate)}</td>
+       <td><b>${money(cabinetAmount)}</b></td>
+       <td>${esc(room)}</td>
+     </tr>`;
+   });
+
+   // IMPORTANT: area/room subtotal contains cabinet value only.
+   bodyRows+=`<tr class="template-room-subtotal">
+     <td colspan="5">Area / Room Cabinet Subtotal:</td>
+     <td><b>${money(roomCabinetTotal)}</b></td><td></td>
+   </tr>`;
+ });
+
+ // SECOND: one separate Hardware and accessories section AFTER all room details.
+ if(allHardware.length){
+   sectionNo++;
+   bodyRows+=`<tr class="template-section-row hardware-section-v11"><td colspan="7">${sectionNo}. Hardware and accessories</td></tr>
+   <tr class="template-colhead">
+     <th>ITEM</th><th>DESCRIPTION OF WORK</th><th>QTY</th><th>UNIT</th>
+     <th>RATE (${esc(db.currency||"₹")})</th><th>AMOUNT (${esc(db.currency||"₹")})</th><th>AREA</th>
+   </tr>`;
+
+   allHardware.forEach((h,index)=>{
+     const linkedCabinet=cabinets.find(i=>i.id===h.cabinetId);
+     const room=h.room||linkedCabinet?.room||"";
+     bodyRows+=`<tr class="template-hardware-row">
+       <td>H.${index+1}</td>
+       <td>
+         <b>${esc(h.name)}</b>
+         ${h.brand?` <span class="muted">• ${esc(h.brand)}</span>`:""}
+         ${linkedCabinet?`<div class="template-spec">For: ${esc(linkedCabinet.type)}</div>`:""}
+         ${h.notes?`<div class="template-spec">${esc(h.notes)}</div>`:""}
+       </td>
+       <td>${Number(h.quantity).toFixed(2)}</td>
+       <td>${esc(h.unit||"Nos")}</td>
+       <td>${money(h.rate)}</td>
+       <td><b>${money(h.amount)}</b></td>
+       <td>${esc(room)}</td>
+     </tr>`;
+   });
+
+   bodyRows+=`<tr class="template-room-subtotal hardware-total-row-v11">
+     <td colspan="5">Hardware Total:</td>
+     <td><b>${money(hardwareGrandTotal)}</b></td><td></td>
+   </tr>`;
+ }
+
+ const logoScale=Math.max(32,Math.min(160,Number(company.logoScale)||64));
+ const logoX=Math.max(-120,Math.min(120,Number(company.logoX)||0));
+ const logoY=Math.max(-80,Math.min(80,Number(company.logoY)||0));
+ const detailsX=Math.max(-140,Math.min(140,Number(company.detailsX)||0));
+ const detailsY=Math.max(-100,Math.min(100,Number(company.detailsY)||0));
+ const companyDetails=[company.address,company.phone,company.email,company.gst?`GSTIN: ${company.gst}`:""].filter(Boolean);
+ const logoVisualSize=company.logo?logoScale:Math.max(56,Math.round(logoScale*.875));
+ const nameHeight=company.showName!==false?21:0;
+ const addressLines=(company.address||"").split(/\r?\n/).reduce((n,line)=>n+Math.max(1,Math.ceil((line||"").length/88)),0);
+ const detailLines=addressLines+(company.phone?1:0)+(company.email?1:0)+(company.gst?1:0);
+ const detailsHeight=detailLines?(detailLines*11+3):0;
+ const companyBlockHeight=nameHeight+detailsHeight;
+ const logoGap=0;
+ const infoTop=logoVisualSize+logoGap+detailsY;
+ const infoBottom=infoTop+companyBlockHeight;
+ const logoTop=logoY;
+ const logoBottom=logoY+logoVisualSize;
+ const visualTop=Math.min(logoTop,infoTop);
+ const visualBottom=Math.max(logoBottom,infoBottom);
+ const topPad=Math.max(6,Math.ceil(-visualTop+6));
+ const titleNaturalHeight=46;
+ const headerHeight=Math.max(64,Math.min(190,Math.ceil(Math.max(topPad+visualBottom+8,titleNaturalHeight+14))));
+ const logo=company.logo
+   ?`<img src="${company.logo}" alt="Company Logo" class="template-logo" style="width:${logoScale}px;max-width:${logoScale}px;height:${logoScale}px;max-height:${logoScale}px">`
+   :`<div class="template-logo-placeholder" style="width:${logoVisualSize}px;height:${logoVisualSize}px">LOGO</div>`;
+ const currency=esc(db.currency||"₹");
+
+ el.innerHTML=`<div class="toolbar">
+   <div>
+     <h2 style="margin:0">BOQ Preview</h2>
+     <div class="muted">Template-style Bill of Quantities • ${approvalBadgeV6(p.boqApprovalStatus)}</div>
+   </div>
+   ${printUnlockedV6()
+     ?`<button class="btn primary" onclick="printBOQExactV13AutoScale()">Print / Save PDF</button>`
+     :`<button class="btn" onclick="alert('Printing is locked until Super Admin approval.')">🔒 Print Locked</button>`}
+ </div>
+
+ <div id="boqDocumentV9" class="boq-document-v9">
+   <div class="doc-header-v9" style="--header-h:${headerHeight}px">
+     <div class="doc-company-v9" style="--logo-x:${logoX}px;--logo-y:${logoY}px;padding-top:${topPad}px">
+       <div class="doc-logo-wrap-v9">${logo}</div>
+       <div class="doc-company-info-block-v9" style="--details-x:${detailsX}px;--details-y:${detailsY}px">
+         ${company.showName!==false?`<div class="doc-company-name-v9">${esc(company.name)}</div>`:""}
+         <div class="doc-company-details-v9">
+           ${company.address?`<div class="doc-company-detail-v9 doc-company-address-v9">${esc(company.address)}</div>`:""}
+           ${company.phone?`<div class="doc-company-detail-v9 doc-company-phone-v9">${esc(company.phone)}</div>`:""}
+           ${company.email?`<div class="doc-company-detail-v9 doc-company-email-v9">${esc(company.email)}</div>`:""}
+           ${company.gst?`<div class="doc-company-detail-v9 doc-company-gst-v9">GSTIN: ${esc(company.gst)}</div>`:""}
+         </div>
+       </div>
+     </div>
+     <div class="doc-title-v9">
+       <div class="doc-title-main-v9">BILL OF QUANTITIES</div>
+       <div class="doc-title-sub-v9">Cost Estimate & Schedule of Quantities</div>
+     </div>
+   </div>
+   <div class="doc-rule-v9"></div>
+
+   <div class="doc-info-grid-v9">
+     <div class="doc-info-box-v9">
+       <div class="doc-box-title-v9">PROJECT & CLIENT DETAILS</div>
+       <div class="doc-line-v9"><span>Client Name:</span><b>${esc(c?.name||"")}</b></div>
+       <div class="doc-line-v9"><span>Project Name:</span><b>${esc(p.name)}</b></div>
+       <div class="doc-line-v9"><span>Site Address:</span><b>${esc(p.address||"")}</b></div>
+       <div class="doc-line-v9"><span>Contact:</span><b>${esc(c?.email||c?.phone||"")}</b></div>
+     </div>
+
+     <div class="doc-info-box-v9">
+       <div class="doc-box-title-v9">BOQ DOCUMENT REFERENCE</div>
+       <div class="doc-line-v9"><span>BOQ Ref No:</span><b>${esc(docRef.refNo)}</b></div>
+       <div class="doc-line-v9"><span>Date of Issue:</span><b>${esc(formatBOQIssueDate(docRef.date))}</b></div>
+       <div class="doc-line-v9"><span>Validity Period:</span><b>${esc(docRef.validity)}</b></div>
+       <div class="doc-line-v9"><span>Prepared By:</span><b>${esc(docRef.preparedBy)}</b></div>
+     </div>
+   </div>
+
+   <div class="doc-summary-v9">
+     <div><span>PROJECT AREA</span><b>${esc(p.projectArea||"—")}</b></div>
+     <div><span>TOTAL CABINET VALUE</span><b>${money(cabinetGrandTotal)}</b></div>
+     <div><span>TOTAL HARDWARE</span><b>${money(hardwareGrandTotal)}</b></div>
+     <div class="estimate-total-v9"><span>ESTIMATED TOTAL</span><b>${money(grandTotal)}</b></div>
+   </div>
+
+   <div class="doc-body-v9">
+     <table class="template-table-v9">
+       <colgroup>
+         <col style="width:7%"><col style="width:49%"><col style="width:9%">
+         <col style="width:10%"><col style="width:11%"><col style="width:14%"><col style="width:10%">
+       </colgroup>
+       <tbody>${bodyRows||'<tr><td colspan="7" class="doc-empty-v9">No BOQ items added.</td></tr>'}</tbody>
+     </table>
+   </div>
+
+   <div class="doc-totals-v9">
+     <div class="totals-line-v9"><span>Cabinet Subtotal:</span><b>${money(cabinetGrandTotal)}</b></div>
+     <div class="totals-line-v9"><span>Hardware Total:</span><b>${money(hardwareGrandTotal)}</b></div>
+     <div class="totals-line-v9"><span>Subtotal:</span><b>${money(commercial.subtotal)}</b></div>
+     ${commercial.discountRate>0?`<div class="totals-line-v9"><span>Discount (${commercial.discountRate.toFixed(2)}%):</span><b>- ${money(commercial.discountAmount)}</b></div>
+     <div class="totals-line-v9"><span>Taxable Amount:</span><b>${money(commercial.taxable)}</b></div>`:""}
+     ${commercial.gstRate>0?`<div class="totals-line-v9"><span>GST (${commercial.gstRate.toFixed(2)}%):</span><b>${money(commercial.gstAmount)}</b></div>`:""}
+     <div class="totals-grand-v9"><span>Grand Total (${currency}):</span><b>${money(grandTotal)}</b></div>
+   </div>
+
+   <div class="doc-terms-v9">
+     <b>Terms & Operational Conditions</b>
+     <ul>
+       ${(Array.isArray(company.terms)?company.terms:DEFAULT_COMPANY.terms).filter(Boolean).map(t=>`<li>${esc(t)}</li>`).join("")}
+     </ul>
+   </div>
+
+   <div class="doc-sign-grid-v9">
+     <div>
+       <b>Prepared By (Contractor / Designer):</b>
+       <div class="sign-line-v9"></div>
+       <div>Authorized Signature: ____________________</div>
+       <div>${esc(company.name)}</div>
+     </div>
+     <div>
+       <b>Accepted & Approved By (Client):</b>
+       <div class="sign-line-v9"></div>
+       <div>Client Signature: _________________________</div>
+       <div>Date: ____ / ____ / ______</div>
+     </div>
+   </div>
+
+   <div class="doc-footer-v9">
+     <span>${esc(company.name)} • Ref: ${esc(boqNumber)}</span><span>Page 1</span>
+   </div>
+ </div>`;
+}
+function defaultBOQDocumentReference(p,boqNumber,company){
+  const today=new Date();
+  const iso=new Date(today.getTime()-today.getTimezoneOffset()*60000).toISOString().slice(0,10);
+  return {refNo:boqNumber||getProjectBOQNumber(p),date:iso,validity:"30 Days",preparedBy:company.name||""};
+}
+function getBOQDocumentReference(p,boqNumber,dateText,company){
+  const d=p?.boqDocument||{};
+  const fallback=defaultBOQDocumentReference(p,boqNumber,company);
+  return {
+    refNo:d.refNo||fallback.refNo,
+    date:d.date||fallback.date,
+    validity:d.validity||fallback.validity,
+    preparedBy:d.preparedBy||fallback.preparedBy
+  };
+}
+function formatBOQIssueDate(value){
+  if(!value)return "";
+  const d=new Date(value+"T00:00:00");
+  if(Number.isNaN(d.getTime()))return value;
+  return d.toLocaleDateString("en-IN",{day:"2-digit",month:"long",year:"numeric"});
+}
+function loadBOQDocumentSettings(){
+  const ref=document.getElementById("boqDocRefNo");
+  const date=document.getElementById("boqDocDate");
+  const validity=document.getElementById("boqDocValidity");
+  const prepared=document.getElementById("boqDocPreparedBy");
+  if(!ref||!date||!validity||!prepared)return;
+  const p=project();
+  if(!p)return;
+  const fallback=defaultBOQDocumentReference(p,getProjectBOQNumber(p),db.company||DEFAULT_COMPANY);
+  const d={...fallback,...(p.boqDocument||{})};
+  ref.value=d.refNo||fallback.refNo;
+  date.value=d.date||fallback.date;
+  validity.value=d.validity||fallback.validity;
+  prepared.value=d.preparedBy||fallback.preparedBy;
+}
+function selectBOQDocumentProject(projectId){
+  const p=db.projects.find(x=>x.id===projectId);
+  if(!p)return;
+  db.selectedProjectId=projectId;
+  db.selectedRoom=(p.rooms&&p.rooms.length?p.rooms[0]:"General");
+  save();
+  loadBOQDocumentSettings();
+}
+function saveBOQDocumentReference(){
+  const p=project();
+  if(!p)return alert("Select a project first.");
+  const refNo=document.getElementById("boqDocRefNo")?.value.trim()||getProjectBOQNumber(p);
+  const date=document.getElementById("boqDocDate")?.value||defaultBOQDocumentReference(p,refNo,db.company||DEFAULT_COMPANY).date;
+  const validity=document.getElementById("boqDocValidity")?.value.trim()||"30 Days";
+  const preparedBy=document.getElementById("boqDocPreparedBy")?.value.trim()||((db.company||DEFAULT_COMPANY).name||"");
+  p.boqDocument={refNo,date,validity,preparedBy};
+  save();
+  loadBOQDocumentSettings();
+  renderQuotation();
+}
+function resetBOQDocumentReference(){
+  const p=project();
+  if(!p)return;
+  if(!confirm("Reset the BOQ document reference for the current project to defaults?"))return;
+  delete p.boqDocument;
+  save();
+  loadBOQDocumentSettings();
+  renderQuotation();
+}
+function readBOQCommercialInputsV17(){
+  const gst=Math.max(0,Math.min(100,Number(document.getElementById("boqGSTRate")?.value)||0));
+  const discount=Math.max(0,Math.min(100,Number(document.getElementById("boqDiscountRate")?.value)||0));
+  return {gst,discount};
+}
+function updateBOQCommercialLivePreviewV17(){
+  const p=project();
+  if(!p)return;
+  const {gst,discount}=readBOQCommercialInputsV17();
+  const subtotal=projectBOQSubtotalV13(p.id);
+  const discountAmount=subtotal*discount/100;
+  const taxable=Math.max(0,subtotal-discountAmount);
+  const gstAmount=taxable*gst/100;
+  const grandTotal=taxable+gstAmount;
+  const el=document.getElementById("boqCommercialLiveTotalV17");
+  if(el)el.innerHTML=`Subtotal <b>${money(subtotal)}</b> &nbsp; | &nbsp; Discount <b>${discount.toFixed(2)}%</b> &nbsp; | &nbsp; GST <b>${gst.toFixed(2)}%</b> &nbsp; | &nbsp; Grand Total <b>${money(grandTotal)}</b>`;
+}
+function saveBOQCommercialAdjustments(){
+  const p=project();
+  if(!p)return alert("Select a project first.");
+  const {gst,discount}=readBOQCommercialInputsV17();
+  const changed=(+p.boqGSTRate||0)!==gst || (+p.boqDiscountRate||0)!==discount;
+  p.boqGSTRate=gst;
+  p.boqDiscountRate=discount;
+  if(changed)resetBOQToDraftV6();
+  localStorage.setItem(KEY,JSON.stringify(db));
+  renderBOQ();
+  renderDashboard();
+  renderDashboardFinanceV13();
+  renderAccountsV13();
+  renderQuotation();
+  loadBOQDocumentSettings();
+  if(discount>0 && changed){
+    alert("GST and Discount saved. Because a discount is applied, this BOQ must be approved by Super Admin before printing.");
+  }else if(changed){
+    alert("GST and Discount saved. BOQ approval has been reset because the quotation total changed.");
+  }
+}
+function resetBOQCommercialAdjustments(){
+  const p=project();
+  if(!p)return;
+  if(!confirm("Reset GST and Discount to 0% for this project?"))return;
+  p.boqGSTRate=0;
+  p.boqDiscountRate=0;
+  resetBOQToDraftV6();
+  localStorage.setItem(KEY,JSON.stringify(db));
+  renderBOQ();
+  renderDashboard();
+  renderDashboardFinanceV13();
+  renderAccountsV13();
+  renderQuotation();
+  loadBOQDocumentSettings();
+}
+function boqProjectOptionsV14(query,selectedId){
+  const q=String(query||"").trim().toLowerCase();
+  let list=db.projects.filter(pr=>{
+    if(!q)return true;
+    const c=db.clients.find(x=>x.id===pr.clientId);
+    const hay=[pr.name,pr.address,pr.type,pr.status,c?.name,c?.company].filter(Boolean).join(" ").toLowerCase();
+    return hay.includes(q);
+  });
+  if(selectedId&&!list.some(pr=>pr.id===selectedId)){
+    const selected=db.projects.find(pr=>pr.id===selectedId);
+    if(selected)list=[selected,...list];
+  }
+  return list.map(pr=>`<option value="${pr.id}" ${pr.id===selectedId?"selected":""}>${esc(pr.name)}${pr.type?" • "+esc(pr.type):""}</option>`).join("");
+}
+function getBOQProjectSearchMatchesV16(query){
+  const q=String(query||"").trim().toLowerCase();
+  return db.projects.filter(pr=>{
+    if(!q)return true;
+    const c=db.clients.find(x=>x.id===pr.clientId);
+    const hay=[pr.name,pr.address,pr.type,pr.status,c?.name,c?.company].filter(Boolean).join(" ").toLowerCase();
+    return hay.includes(q);
+  });
+}
+function renderBOQProjectSearchResultsV16(query,forceShow=true){
+  const box=document.getElementById("boqProjectSearchResultsV16");
+  if(!box)return;
+  const matches=getBOQProjectSearchMatchesV16(query);
+  const currentId=db.selectedProjectId;
+  box.innerHTML=matches.length?matches.map(pr=>{
+    const c=db.clients.find(x=>x.id===pr.clientId);
+    const meta=[c?.name,pr.address,pr.type].filter(Boolean).join(" • ");
+    return `<button type="button" class="boq-project-search-result-v16" onclick="selectBOQProjectV14('${pr.id}')"><b>${esc(pr.name)}${pr.id===currentId?' ✓':''}</b><span>${esc(meta||'Project')}</span></button>`;
+  }).join(""):`<div class="boq-project-search-empty-v16">No matching projects found.</div>`;
+  if(forceShow)box.classList.add("show");
+}
+function showBOQProjectSearchResultsV16(){
+  renderBOQProjectSearchResultsV16(db.boqProjectSearch||"",true);
+}
+function filterBOQProjectsV14(value){
+  db.boqProjectSearch=value||"";
+  const p=project();
+  const select=document.getElementById("boqProjectSelectV14");
+  const count=document.getElementById("boqProjectSearchCountV14");
+  if(select)select.innerHTML=boqProjectOptionsV14(db.boqProjectSearch,p?.id);
+  const matches=getBOQProjectSearchMatchesV16(db.boqProjectSearch);
+  if(count)count.textContent=`${matches.length} project${matches.length===1?"":"s"}`;
+  renderBOQProjectSearchResultsV16(db.boqProjectSearch,true);
+}
+document.addEventListener("click",e=>{
+  const masterBtn=e.target.closest("[data-master-action]");
+  if(masterBtn){
+    const action=masterBtn.dataset.masterAction;
+    const kind=masterBtn.dataset.masterKind;
+    const name=masterBtn.dataset.masterName||"";
+    if(action==="edit") editMasterItem(kind,name);
+    else if(action==="remove") removeMasterItem(kind,name);
+    return;
+  }
+  const masterModalBtn=e.target.closest("[data-master-modal-action=\"save\"]");
+  if(masterModalBtn){
+    saveMasterItem(masterModalBtn.dataset.masterKind||"",masterModalBtn.dataset.masterOld||"");
+    return;
+  }
+  const cabBtn=e.target.closest("[data-cabinet-action]");
+  if(cabBtn){
+    const action=cabBtn.dataset.cabinetAction;
+    const name=cabBtn.dataset.cabinetName||"";
+    if(action==="edit") openCabinetMasterModal(name);
+    else if(action==="remove") removeCabinetMasterItem(name);
+    return;
+  }
+  const cabModalBtn=e.target.closest("[data-cabinet-modal-action=\"save\"]");
+  if(cabModalBtn){
+    saveCabinetMasterItem(cabModalBtn.dataset.cabinetOld||"");
+    return;
+  }
+  const wrap=document.querySelector(".boq-project-search-wrap-v16");
+  const box=document.getElementById("boqProjectSearchResultsV16");
+  if(box&&wrap&&!wrap.contains(e.target))box.classList.remove("show");
+});
+
+function loadCompanySettings(){
+  const c={...DEFAULT_COMPANY,...(db.company||{})};
+  const map={coName:"name",coAddress:"address",coPhone:"phone",coEmail:"email",coGST:"gst"};
+  Object.keys(map).forEach(id=>{const el=document.getElementById(id);if(el)el.value=c[map[id]]||""});
+  const lp=document.getElementById("logoPreview");
+  if(lp)lp.innerHTML=c.logo?`<img src="${c.logo}" alt="Logo">`:"No logo";
+  const ls=document.getElementById("coLogoScale");
+  if(ls)ls.value=Math.max(32,Math.min(160,Number(c.logoScale)||64));
+  const sn=document.getElementById("coShowCompanyName");
+  if(sn)sn.checked=c.showName!==false;
+  const controls={
+    coLogoX:[c.logoX,-120,120,"coLogoXValue"],coLogoY:[c.logoY,-80,80,"coLogoYValue"],
+    coDetailsX:[c.detailsX,-140,140,"coDetailsXValue"],coDetailsY:[c.detailsY,-100,100,"coDetailsYValue"]
+  };
+  Object.entries(controls).forEach(([id,[value,min,max,valueId]])=>{
+    const safe=Math.max(min,Math.min(max,Number(value)||0));
+    const el=document.getElementById(id); if(el)el.value=safe;
+    const out=document.getElementById(valueId); if(out)out.textContent=safe+" px";
+  });
+  const lsv=document.getElementById("coLogoScaleValue"); if(lsv&&ls)lsv.textContent=ls.value+" px";
+  const termsEl=document.getElementById("coTerms");
+  if(termsEl)termsEl.value=(Array.isArray(c.terms)?c.terms:DEFAULT_COMPANY.terms).join("\n");
+  const bp=document.getElementById("boqPrefix"); if(bp)bp.value=db.boqPrefix||"BOQ";
+  const bn=document.getElementById("boqNext"); if(bn)bn.value=db.boqNext||1;
+  updateCompanyHeaderPreview();
+}
+function companyHeaderSettingsValues(){
+  const n=(id,def=0)=>Number(document.getElementById(id)?.value ?? def)||def;
+  return {
+    logoScale:Math.max(32,Math.min(160,n("coLogoScale",64))),
+    logoX:Math.max(-120,Math.min(120,n("coLogoX",0))), logoY:Math.max(-80,Math.min(80,n("coLogoY",0))),
+    detailsX:Math.max(-140,Math.min(140,n("coDetailsX",0))), detailsY:Math.max(-100,Math.min(100,n("coDetailsY",0))),
+    showName:document.getElementById("coShowCompanyName")?.checked!==false
+  };
+}
+function updateCompanyHeaderPreview(){
+  const preview=document.getElementById("companyHeaderLivePreview");
+  if(!preview)return;
+  const c={...DEFAULT_COMPANY,...(db.company||{})};
+  const v=companyHeaderSettingsValues();
+  [["coLogoScaleValue",v.logoScale+" px"],["coLogoXValue",v.logoX+" px"],["coLogoYValue",v.logoY+" px"],["coDetailsXValue",v.detailsX+" px"],["coDetailsYValue",v.detailsY+" px"]].forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.textContent=val;});
+  const ps=Math.max(24,Math.min(110,Math.round(v.logoScale*.62)));
+  const logo=c.logo?`<img src="${c.logo}" class="live-logo" alt="Company Logo" style="width:${ps}px;height:${ps}px;max-width:${ps}px;max-height:${ps}px">`:`<div class="live-logo-placeholder" style="width:${Math.max(38,Math.round(v.logoScale*.55))}px;height:${Math.max(38,Math.round(v.logoScale*.55))}px">LOGO</div>`;
+  const name=esc(document.getElementById("coName")?.value?.trim()||c.name||"Your Company Name");
+  const address=esc(document.getElementById("coAddress")?.value?.trim()||c.address||"");
+  const phone=esc(document.getElementById("coPhone")?.value?.trim()||c.phone||"");
+  const email=esc(document.getElementById("coEmail")?.value?.trim()||c.email||"");
+  const gst=esc(document.getElementById("coGST")?.value?.trim()||c.gst||"");
+  const logoVisualSize= c.logo ? Math.max(24,Math.min(110,Math.round(v.logoScale*.62))) : Math.max(38,Math.round(v.logoScale*.55));
+  const previewAddressLines=(address||"").split(/\r?\n/).reduce((n,line)=>n+Math.max(1,Math.ceil((line||"").length/70)),0);
+  const previewDetailLines=previewAddressLines+(phone?1:0)+(email?1:0)+(gst?1:0);
+  const previewInfoHeight=(v.showName?18:0)+(previewDetailLines?previewDetailLines*9+3:0);
+  const scale=.62;
+  const pLogoY=v.logoY*scale, pDetailsY=v.detailsY*scale;
+  const pInfoTop=logoVisualSize+pDetailsY;
+  const pLogoBottom=pLogoY+logoVisualSize;
+  const pInfoBottom=pInfoTop+previewInfoHeight;
+  const pVisualTop=Math.min(pLogoY,pInfoTop);
+  const pVisualBottom=Math.max(pLogoBottom,pInfoBottom);
+  const pTopPad=Math.max(7,Math.ceil(-pVisualTop+7));
+  const previewHeight=Math.max(108,Math.min(220,Math.ceil(Math.max(pTopPad+pVisualBottom+7,66+12))));
+  preview.style.height=previewHeight+"px";
+  preview.innerHTML=`<div class="live-header" style="height:${previewHeight-10}px;--logo-x:${Math.round(v.logoX*scale)}px;--logo-y:${Math.round(v.logoY*scale)}px;box-sizing:border-box"><div class="live-company" style="top:${pTopPad}px"><div class="live-logo-wrap">${logo}</div><div class="live-company-info-block-v13" style="--details-x:${Math.round(v.detailsX*scale)}px;--details-y:${Math.round(v.detailsY*scale)}px">${v.showName?`<div class="live-name">${name}</div>`:""}<div class="live-details-v13">${address?`<div class="live-detail-v13 live-address-v13">${address}</div>`:""}${phone?`<div class="live-detail-v13">${phone}</div>`:""}${email?`<div class="live-detail-v13">${email}</div>`:""}${gst?`<div class="live-detail-v13">GSTIN: ${gst}</div>`:""}</div></div></div><div class="live-title"><div class="live-title-main">BILL OF QUANTITIES</div><div class="live-title-sub">Cost Estimate & Schedule of Quantities</div></div></div><div class="live-rule"></div>`;
+}
+function resetCompanyHeaderPosition(){["coLogoX","coLogoY","coDetailsX","coDetailsY"].forEach(id=>{const el=document.getElementById(id);if(el)el.value=0;});updateCompanyHeaderPreview();}
+function saveCompanyProfile(){
+  const terms=(document.getElementById("coTerms")?.value||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  db.company={...DEFAULT_COMPANY,...(db.company||{}),
+    name:document.getElementById("coName").value.trim()||"Your Company Name",
+    address:document.getElementById("coAddress").value.trim(),
+    phone:document.getElementById("coPhone").value.trim(),
+    email:document.getElementById("coEmail").value.trim(),
+    gst:document.getElementById("coGST").value.trim(),
+    logoScale:Math.max(32,Math.min(160,Number(document.getElementById("coLogoScale")?.value)||64)),
+    showName:document.getElementById("coShowCompanyName")?.checked!==false,
+    logoX:Math.max(-120,Math.min(120,Number(document.getElementById("coLogoX")?.value)||0)),
+    logoY:Math.max(-80,Math.min(80,Number(document.getElementById("coLogoY")?.value)||0)),
+    detailsX:Math.max(-140,Math.min(140,Number(document.getElementById("coDetailsX")?.value)||0)),
+    detailsY:Math.max(-100,Math.min(100,Number(document.getElementById("coDetailsY")?.value)||0)),
+    terms:terms.length?terms:DEFAULT_COMPANY.terms
+  };
+  const file=document.getElementById("coLogo")?.files?.[0];
+  if(file){
+    const reader=new FileReader();
+    reader.onload=()=>{db.company.logo=reader.result;localStorage.setItem(KEY,JSON.stringify(db));loadCompanySettings();renderQuotation();};
+    reader.readAsDataURL(file);
+  }else{save();loadCompanySettings();renderQuotation();}
+}
+function removeLogo(){db.company={...DEFAULT_COMPANY,...(db.company||{}),logo:""};save();loadCompanySettings();}
+function saveBOQNumbering(){
+  db.boqPrefix=(document.getElementById("boqPrefix").value.trim()||"BOQ").toUpperCase();
+  db.boqNext=Math.max(1,parseInt(document.getElementById("boqNext").value||"1",10));
+  save();loadCompanySettings();
+}
+function getProjectBOQNumber(p){
+  const key="boqNo_"+p.id;
+  if(!db[key]){
+    const prefix=db.boqPrefix||"BOQ", next=Math.max(1,parseInt(db.boqNext||1,10));
+    db[key]=`${prefix}-${String(next).padStart(4,"0")}`;
+    db.boqNext=next+1;
+    localStorage.setItem(KEY,JSON.stringify(db));
+  }
+  return db[key];
+}
+
+
+
+function ensureRateCombinationsForMasters(){
+  const materials=materialMasterList(), finishes=finishMasterList();
+  const existing=new Set((db.rates||[]).map(r=>rateKey(r.type,r.finish,r.materialGrade)));
+  cabinetMasterList().forEach(type=>{
+    const seed=defaultRates.find(r=>r.type===type)||defaultRates[0]||{};
+    finishes.forEach(finish=>materials.forEach(materialGrade=>{
+      const key=rateKey(type,finish,materialGrade);
+      if(!existing.has(key)){
+        db.rates.push({id:uid("r"),type,finish,materialGrade,unit:seed.unit||"Rft",formula:seed.formula||"width/304.8",rate:0});
+        existing.add(key);
+      }
+    }));
+  });
+}
+function openMasterItemModal(kind, oldName=""){
+  const isMaterial=kind==="material";
+  const title=isMaterial?"Material":"Finish";
+  const editing=!!oldName;
+  openModal(`<h2>${editing?"Edit":"Add"} ${title}</h2>
+    <div class="field"><label>${title} Name</label><input id="masterItemName" value="${esc(oldName)}" placeholder="${isMaterial?'e.g. HDHMR Board':'e.g. PU Gloss Finish'}"></div>
+    ${!editing?`<div class="kpi-note" style="margin-top:10px">The new ${title.toLowerCase()} will be available in BOQ Builder and Rate Master. New rate combinations start at ₹0 until you enter the rate.</div>`:""}
+    <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button type="button" class="btn primary" data-master-modal-action="save" data-master-kind="${esc(kind)}" data-master-old="${esc(oldName)}">${editing?"Save Changes":"Add " + title}</button></div>`);
+}
+function openMaterialMasterModal(){if(!hasPermissionV6("materials")&&!isSuperAdminV6())return alert("You do not have access to Material Master.");openMasterItemModal("material")}
+function openFinishMasterModal(){if(!hasPermissionV6("finishes")&&!isSuperAdminV6())return alert("You do not have access to Finish Master.");openMasterItemModal("finish")}
+function editMasterItem(kind,name){
+  const key=kind==="material"?"materials":"finishes";
+  if(!hasPermissionV6(key)&&!isSuperAdminV6())return alert(`You do not have access to ${kind==="material"?"Material":"Finish"} Master.`);
+  openMasterItemModal(kind,name);
+}
+function saveMasterItem(kind,oldName=""){
+  const isMaterial=kind==="material";
+  if(!hasPermissionV6(isMaterial?"materials":"finishes")&&!isSuperAdminV6())return;
+  const name=(document.getElementById("masterItemName")?.value||"").trim();
+  if(!name)return alert(`Enter a ${isMaterial?"material":"finish"} name.`);
+  const list=isMaterial?db.materials:db.finishes;
+  if(oldName){
+    if(name.toLowerCase()===String(oldName).toLowerCase())return closeModal();
+    if(list.some(x=>String(x).toLowerCase()===name.toLowerCase()))return alert(`${isMaterial?"Material":"Finish"} already exists.`);
+    const ix=list.indexOf(oldName);
+    if(ix<0)return alert(`${isMaterial?"Material":"Finish"} not found.`);
+    list[ix]=name;
+    if(isMaterial){
+      (db.rates||[]).forEach(r=>{if(r.materialGrade===oldName)r.materialGrade=name});
+      (db.boq||[]).forEach(i=>{if(i.materialGrade===oldName){i.materialGrade=name;if(!i.customDescription)i.description=materialFinishDescription(i.type,i.finish,name)}});
+    }else{
+      (db.rates||[]).forEach(r=>{if(r.finish===oldName)r.finish=name});
+      (db.boq||[]).forEach(i=>{if(i.finish===oldName){i.finish=name;if(!i.customDescription)i.description=materialFinishDescription(i.type,name,i.materialGrade)}});
+    }
+  }else{
+    if(list.some(x=>String(x).toLowerCase()===name.toLowerCase()))return alert(`${isMaterial?"Material":"Finish"} already exists.`);
+    list.push(name);
+  }
+  ensureRateCombinationsForMasters();
+  save();closeModal();renderAll();showView(isMaterial?"materials":"finishes");
+}
+function removeMasterItem(kind,name){
+  const isMaterial=kind==="material";
+  if(!hasPermissionV6(isMaterial?"materials":"finishes")&&!isSuperAdminV6())return;
+  const list=isMaterial?db.materials:db.finishes;
+  if(list.length<=1)return alert(`At least one ${isMaterial?"material":"finish"} must remain.`);
+  const usedInBOQ=(db.boq||[]).filter(i=>(isMaterial?i.materialGrade:i.finish)===name).length;
+  const usedInRates=(db.rates||[]).filter(r=>(isMaterial?r.materialGrade:r.finish)===name).length;
+  const usage=usedInBOQ||usedInRates?`\n\n${usedInBOQ} BOQ item(s) and ${usedInRates} rate row(s) reference this ${isMaterial?"material":"finish"}. Existing data will be preserved, but the item will be hidden from new selections.`:"";
+  if(!confirm(`Remove ${isMaterial?"material":"finish"} “${name}”?${usage}`))return;
+  const ix=list.indexOf(name);
+  if(ix>=0)list.splice(ix,1);
+  save();renderAll();
+}
+function renderMaterialMaster(){
+  const el=document.getElementById("materialsTable");if(!el)return;
+  if(!hasPermissionV6("materials")&&!isSuperAdminV6()){el.innerHTML='<div class="empty">Material Master access required.</div>';return}
+  const list=materialMasterList();
+  el.innerHTML=list.length?`<table><thead><tr><th>Material</th><th>BOQ Items</th><th>Rate Rows</th><th></th></tr></thead><tbody>${list.map(name=>{
+    const boq=(db.boq||[]).filter(i=>i.materialGrade===name).length;
+    const rates=(db.rates||[]).filter(r=>r.materialGrade===name).length;
+    return `<tr><td><b>${esc(name)}</b></td><td>${boq}</td><td>${rates}</td><td class="num"><button type="button" class="btn small" data-master-action="edit" data-master-kind="material" data-master-name="${esc(name)}">Edit</button> <button type="button" class="btn small danger" data-master-action="remove" data-master-kind="material" data-master-name="${esc(name)}">Remove</button></td></tr>`;
+  }).join("")} </tbody></table>`:'<div class="empty">No materials in Material Master.</div>';
+}
+function renderFinishMaster(){
+  const el=document.getElementById("finishesTable");if(!el)return;
+  if(!hasPermissionV6("finishes")&&!isSuperAdminV6()){el.innerHTML='<div class="empty">Finish Master access required.</div>';return}
+  const list=finishMasterList();
+  el.innerHTML=list.length?`<table><thead><tr><th>Finish</th><th>BOQ Items</th><th>Rate Rows</th><th></th></tr></thead><tbody>${list.map(name=>{
+    const boq=(db.boq||[]).filter(i=>i.finish===name).length;
+    const rates=(db.rates||[]).filter(r=>r.finish===name).length;
+    return `<tr><td><b>${esc(name)}</b></td><td>${boq}</td><td>${rates}</td><td class="num"><button type="button" class="btn small" data-master-action="edit" data-master-kind="finish" data-master-name="${esc(name)}">Edit</button> <button type="button" class="btn small danger" data-master-action="remove" data-master-kind="finish" data-master-name="${esc(name)}">Remove</button></td></tr>`;
+  }).join("")} </tbody></table>`:'<div class="empty">No finishes in Finish Master.</div>';
+}
+
+function openCabinetMasterModal(oldName=""){
+  if(!hasPermissionV6("cabinets")&&!isSuperAdminV6())return alert("You do not have access to Cabinet Master.");
+  const editing=!!oldName;
+  openModal(`<h2>${editing?"Edit":"Add"} Cabinet Type</h2>
+    <div class="field"><label>Cabinet Type Name</label><input id="cabinetMasterItemName" value="${esc(oldName)}" placeholder="e.g. Drawer Unit"></div>
+    ${!editing?`<div class="kpi-note" style="margin-top:10px">The new cabinet type will be available in BOQ Builder and Rate Master. Rates are created for all active material + finish combinations at ₹0 until you enter the required rates.</div>`:""}
+    <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button type="button" class="btn primary" data-cabinet-modal-action="save" data-cabinet-old="${esc(oldName)}">${editing?"Save Changes":"Add Cabinet Type"}</button></div>`);
+}
+function saveCabinetMasterItem(oldName=""){
+  if(!hasPermissionV6("cabinets")&&!isSuperAdminV6())return;
+  const name=(document.getElementById("cabinetMasterItemName")?.value||"").trim();
+  if(!name)return alert("Enter a cabinet type name.");
+  const list=db.cabinetTypes;
+  if(oldName){
+    if(name.toLowerCase()===String(oldName).toLowerCase())return closeModal();
+    if(list.some(x=>String(x).toLowerCase()===name.toLowerCase()))return alert("Cabinet type already exists.");
+    const ix=list.indexOf(oldName);
+    if(ix<0)return alert("Cabinet type not found.");
+    list[ix]=name;
+    (db.rates||[]).forEach(r=>{if(r.type===oldName)r.type=name});
+    (db.boq||[]).forEach(i=>{if(i.type===oldName){i.type=name;if(!i.customDescription)i.description=materialFinishDescription(name,i.finish,i.materialGrade)}});
+  }else{
+    if(list.some(x=>String(x).toLowerCase()===name.toLowerCase()))return alert("Cabinet type already exists.");
+    list.push(name);
+  }
+  ensureRateCombinationsForMasters();
+  save();closeModal();renderAll();showView("cabinets");
+}
+function removeCabinetMasterItem(name){
+  if(!hasPermissionV6("cabinets")&&!isSuperAdminV6())return;
+  const list=db.cabinetTypes;
+  if(list.length<=1)return alert("At least one cabinet type must remain.");
+  const usedInBOQ=(db.boq||[]).filter(i=>i.type===name&&isCabinetBOQItem(i)).length;
+  const usedInRates=(db.rates||[]).filter(r=>r.type===name).length;
+  const usage=usedInBOQ||usedInRates?`\n\n${usedInBOQ} BOQ item(s) and ${usedInRates} rate row(s) reference this cabinet type. Existing data will be preserved, but the type will be hidden from new selections.`:"";
+  if(!confirm(`Remove cabinet type “${name}”?${usage}`))return;
+  const ix=list.indexOf(name);
+  if(ix>=0)list.splice(ix,1);
+  save();renderAll();
+}
+function renderCabinetMaster(){
+  const el=document.getElementById("cabinetsTable");if(!el)return;
+  if(!hasPermissionV6("cabinets")&&!isSuperAdminV6()){el.innerHTML='<div class="empty">Cabinet Master access required.</div>';return}
+  const list=cabinetMasterList();
+  el.innerHTML=list.length?`<table><thead><tr><th>Cabinet Type</th><th>BOQ Items</th><th>Rate Rows</th><th></th></tr></thead><tbody>${list.map(name=>{
+    const boq=(db.boq||[]).filter(i=>i.type===name&&isCabinetBOQItem(i)).length;
+    const rates=(db.rates||[]).filter(r=>r.type===name).length;
+    return `<tr><td><b>${esc(name)}</b></td><td>${boq}</td><td>${rates}</td><td class="num"><button type="button" class="btn small" data-cabinet-action="edit" data-cabinet-name="${esc(name)}">Edit</button> <button type="button" class="btn small danger" data-cabinet-action="remove" data-cabinet-name="${esc(name)}">Remove</button></td></tr>`;
+  }).join("")}</tbody></table>`:'<div class="empty">No cabinet types in Cabinet Master.</div>';
+}
+
+function openHardwareModalV7(id){
+  if(!hasPermissionV6("hardware") && !isSuperAdminV6()){alert("You do not have access to Hardware Master.");return}
+  const h=(db.hardware||[]).find(x=>x.id===id)||{};
+  openModal(`<h2>${id?"Edit":"Add"} Hardware</h2>
+    <div class="formgrid">
+      <div class="field"><label>Category</label><input id="hCategoryV7" value="${esc(h.category||"Accessories")}"></div>
+      <div class="field"><label>Hardware Name</label><input id="hNameV7" value="${esc(h.name||"")}"></div>
+      <div class="field"><label>Brand</label><input id="hBrandV7" value="${esc(h.brand||"")}"></div>
+      <div class="field"><label>Unit</label><select id="hUnitV7">${["Nos","Pair","Set","Rft","Sqft"].map(x=>`<option ${x===(h.unit||"Nos")?"selected":""}>${x}</option>`).join("")}</select></div>
+      <div class="field"><label>BOQ Rate</label><input id="hRateV7" type="number" min="0" step="0.01" value="${h.rate??0}"></div>
+    </div>
+    <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveHardwareV7('${id||""}')">Save Hardware</button></div>`)
+}
+function saveHardwareV7(id){
+  if(!hasPermissionV6("hardware")){alert("You do not have access to Hardware Master.");return}
+  const obj={id:id||uid("h"),category:document.getElementById("hCategoryV7").value.trim()||"Accessories",
+    name:document.getElementById("hNameV7").value.trim(),brand:document.getElementById("hBrandV7").value.trim(),
+    unit:document.getElementById("hUnitV7").value,rate:+document.getElementById("hRateV7").value||0};
+  if(!obj.name)return alert("Enter a hardware name.");
+  const ix=(db.hardware||[]).findIndex(x=>x.id===obj.id);
+  if(ix>=0)db.hardware[ix]=obj;else db.hardware.push(obj);
+  save();closeModal();
+}
+function deleteHardwareV7(id){
+  if(!hasPermissionV6("hardware")&&!isSuperAdminV6())return alert("You do not have access to Hardware Master.");
+  const h=(db.hardware||[]).find(x=>x.id===id);
+  if(!h)return;
+  const cabUses=(db.boqHardware||[]).filter(x=>x.hardwareId===id).length;
+  const standaloneUses=(db.boqHardwareStandalone||[]).filter(x=>x.hardwareId===id).length;
+  const usage=cabUses||standaloneUses?`\n\n${cabUses} cabinet hardware line(s) and ${standaloneUses} project hardware line(s) reference this item. Existing BOQ data will be preserved, but the master item will be removed.`:"";
+  if(!confirm(`Delete hardware “${h.name}”?${usage}`))return;
+  db.hardware=db.hardware.filter(x=>x.id!==id);
+  save();renderAll();showView("hardware");
+}
+function renderHardwareV7(){
+  const el=document.getElementById("hardwareTableV7");if(!el)return;
+  if(!hasPermissionV6("hardware")){el.innerHTML='<div class="empty">Hardware Master access required.</div>';return}
+  el.innerHTML=`<table><thead><tr><th>Category</th><th>Hardware</th><th>Brand</th><th>Unit</th><th class="num">Rate</th><th></th></tr></thead>
+  <tbody>${(db.hardware||[]).map(h=>`<tr><td>${esc(h.category)}</td><td><b>${esc(h.name)}</b></td><td>${esc(h.brand)}</td><td>${esc(h.unit)}</td><td class="num">${money(h.rate)}</td><td class="num"><button class="btn small" onclick="openHardwareModalV7('${h.id}')">Edit</button> <button class="btn small danger" onclick="deleteHardwareV7('${h.id}')">Delete</button></td></tr>`).join("")}</tbody></table>`;
+}
+
+function renderUsersV6(){
+  const el=document.getElementById("usersTableV6");
+  if(!el)return;
+  if(!isSuperAdminV6()){el.innerHTML='<div class="empty">Super Admin access required.</div>';return}
+  const users=(db.users||[]);
+  el.innerHTML=`<table><thead><tr><th>User</th><th>Role</th><th>Status</th><th>Panel Access</th><th></th></tr></thead><tbody>${
+    users.map(u=>{
+      const access=u.role==="superadmin"?"All panels":Object.keys(PANEL_LABELS_V6).filter(k=>u.permissions?.[k]).map(k=>PANEL_LABELS_V6[k]).join(", ")||"No panels";
+      return `<tr><td><b>${esc(u.displayName)}</b><div class="muted">User ID: @${esc(u.username)}</div></td>
+      <td>${u.role==="superadmin"?'<span class="badge good">SUPER ADMIN</span>':'<span class="badge">NORMAL USER</span>'}</td>
+      <td>${u.active?'<span class="badge good">Active</span>':'<span class="badge">Inactive</span>'}</td>
+      <td style="max-width:390px">${esc(access)}</td>
+      <td class="num"><button class="btn small" onclick="openUserModalV6('${u.id}')">Edit User</button>${u.role!=="superadmin"?` <button class="btn small danger" onclick="removeUserV15('${u.id}')">Remove</button>`:""}</td></tr>`;
+    }).join("")
+  }</tbody></table>
+  <div class="kpi-note user-admin-note-v15">Only Super Admin can add/remove users, change User IDs and passwords, control panel access, approve BOQs, or unlock printing. The Super Admin account itself cannot be removed.</div>`;
+}
+function openAddUserModalV15(){
+  if(!isSuperAdminV6())return;
+  const perms=Object.entries(PANEL_LABELS_V6).map(([key,label])=>
+    `<div class="permission-item"><label><input type="checkbox" id="newPermV15_${key}" checked="${["dashboard","clients","projects","boq","quotation"].includes(key)?"checked":""}">${esc(label)}</label></div>`
+  ).join("").replace(/checked=""/g,'');
+  openModal(`<h2>Add User</h2>
+    <div class="formgrid">
+      <div class="field"><label>Display Name</label><input id="newDisplayV15" placeholder="Normal User 4"></div>
+      <div class="field"><label>User ID / Username</label><input id="newUsernameV15" placeholder="user4" autocomplete="off"></div>
+      <div class="field"><label>Password</label><input id="newPasswordV15" type="password" placeholder="Set password" autocomplete="new-password"></div>
+      <div class="field"><label>Status</label><select id="newActiveV15"><option value="1" selected>Active</option><option value="0">Inactive</option></select></div>
+    </div>
+    <div class="section-title">Panel Access</div>
+    <div class="permission-grid">${perms}</div>
+    <div class="kpi-note" style="margin-top:10px">New users are created as Normal Users. Super Admin remains the administrator account.</div>
+    <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveNewUserV15()">Add User</button></div>`);
+}
+async function saveNewUserV15(){
+  if(!isSuperAdminV6())return;
+  const displayName=document.getElementById("newDisplayV15").value.trim();
+  const username=document.getElementById("newUsernameV15").value.trim().toLowerCase();
+  const password=document.getElementById("newPasswordV15").value;
+  const active=document.getElementById("newActiveV15").value==="1";
+  if(!username)return alert("Enter a User ID / Username.");
+  if(!/^[a-z0-9._-]{3,40}$/.test(username))return alert("User ID can use 3-40 characters: letters, numbers, dot, underscore or hyphen.");
+  if(!password)return alert("Enter a password.");
+  if(password.length<6)return alert("Password must be at least 6 characters.");
+  if((db.users||[]).some(u=>u.username.toLowerCase()===username))return alert("That User ID is already in use.");
+  const user={id:uid("u"),username,displayName:displayName||username,role:"user",active,passwordHash:await hashPasswordV6(password),permissions:{}};
+  Object.keys(PANEL_LABELS_V6).forEach(k=>user.permissions[k]=!!document.getElementById("newPermV15_"+k)?.checked);
+  db.users.push(user);
+  save();closeModal();showView("users");
+}
+function openUserModalV6(id){
+  if(!isSuperAdminV6())return;
+  const u=db.users.find(x=>x.id===id);if(!u)return;
+  const perms=Object.entries(PANEL_LABELS_V6).map(([key,label])=>
+    `<div class="permission-item"><label><input type="checkbox" id="permV6_${key}" ${u.role==="superadmin"||u.permissions?.[key]?"checked":""} ${u.role==="superadmin"?"disabled":""}>${esc(label)}</label></div>`
+  ).join("");
+  openModal(`<h2>Edit User</h2>
+    <div class="formgrid">
+      <div class="field"><label>Display Name</label><input id="uDisplayV6" value="${esc(u.displayName)}"></div>
+      <div class="field"><label>User ID / Username</label><input id="uUsernameV6" value="${esc(u.username)}" autocomplete="off"></div>
+      <div class="field"><label>Role</label><input value="${u.role==="superadmin"?"Super Admin":"Normal User"}" readonly></div>
+      <div class="field"><label>Status</label><select id="uActiveV6" ${u.role==="superadmin"?"disabled":""}><option value="1" ${u.active?"selected":""}>Active</option><option value="0" ${!u.active?"selected":""}>Inactive</option></select></div>
+    </div>
+    <div class="field" style="margin-top:12px"><label>New Password (leave blank to keep current)</label><input id="uPasswordV6" type="password" autocomplete="new-password" placeholder="Enter new password"></div>
+    <div class="section-title">Panel Access</div>
+    <div class="permission-grid">${perms}</div>
+    <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveUserV6('${u.id}')">Save User</button></div>`);
+}
+async function saveUserV6(id){
+  if(!isSuperAdminV6())return;
+  const u=db.users.find(x=>x.id===id);if(!u)return;
+  const newUsername=document.getElementById("uUsernameV6").value.trim().toLowerCase();
+  if(!newUsername)return alert("User ID / Username cannot be empty.");
+  if(!/^[a-z0-9._-]{3,40}$/.test(newUsername))return alert("User ID can use 3-40 characters: letters, numbers, dot, underscore or hyphen.");
+  if((db.users||[]).some(x=>x.id!==u.id&&x.username.toLowerCase()===newUsername))return alert("That User ID is already in use.");
+  u.displayName=document.getElementById("uDisplayV6").value.trim()||u.displayName;
+  u.username=newUsername;
+  if(u.role!=="superadmin")u.active=document.getElementById("uActiveV6").value==="1";
+  const pw=document.getElementById("uPasswordV6").value;
+  if(pw){if(pw.length<6)return alert("Password must be at least 6 characters.");u.passwordHash=await hashPasswordV6(pw);}
+  if(u.role!=="superadmin"){
+    u.permissions={};
+    Object.keys(PANEL_LABELS_V6).forEach(k=>u.permissions[k]=!!document.getElementById("permV6_"+k)?.checked);
+  }
+  save();closeModal();showView("users");
+}
+function removeUserV15(id){
+  if(!isSuperAdminV6())return;
+  const ix=(db.users||[]).findIndex(u=>u.id===id);
+  if(ix<0)return;
+  const u=db.users[ix];
+  if(u.role==="superadmin")return alert("The Super Admin account cannot be removed.");
+  if(!confirm(`Remove user @${u.username}? This only removes the user login and access; project and BOQ data are kept.`))return;
+  db.users.splice(ix,1);
+  save();showView("users");
+}
+
+function exportData(){let blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="boqbee-backup.json";a.click();URL.revokeObjectURL(a.href)}
+function resetData(){if(confirm("Reset the browser data to the demo dataset?")){localStorage.removeItem(KEY);location.reload()}}
+// Masters + rate migration. Material / finish masters are user-managed. Removing a master item hides it from new selections but preserves historical BOQ/rate data.
+ensureMasterLists();
+db.rates=(db.rates||[]).map(r=>({...r,materialGrade:r.materialGrade||materialMasterList()[0]||"MR Ply",finish:r.finish||finishMasterList()[0]||"Laminate"}));
+db.boq=(db.boq||[]).map(i=>({...i,materialGrade:i.materialGrade||materialMasterList()[0]||"MR Ply"}));
+syncBOQRates();
+
+// One-time migration for earlier MVP data.
+db.boq=(db.boq||[]).map(i=>{
+  const isOtherItem=!isCabinetBOQItem(i);
+  return {...i,materialGrade:i.materialGrade||materialMasterList()[0]||"MR Ply",customDescription:i.customDescription||"",itemKind:i.itemKind||(isOtherItem?"other":"cabinet"),description:isOtherItem?(i.customDescription||""):materialFinishDescription(i.type,i.finish||finishMasterList()[0]||"Laminate",i.materialGrade||materialMasterList()[0]||"MR Ply")};
+});
+const __normalizeOtherDescriptionsV13=true;
+syncBOQRates();
+
+db.projects=(db.projects||[]).map(p=>({...p,
+  boqApprovalStatus:p.boqApprovalStatus||"Draft",
+  boqApprovedBy:p.boqApprovedBy||null,
+  boqApprovedAt:p.boqApprovedAt||null,
+  boqApprovalNote:p.boqApprovalNote||"",
+  boqDocument:p.boqDocument||null,
+  boqGSTRate:Number.isFinite(+p.boqGSTRate)?Math.max(0,Math.min(100,+p.boqGSTRate)):0,
+  boqDiscountRate:Number.isFinite(+p.boqDiscountRate)?Math.max(0,Math.min(100,+p.boqDiscountRate)):0
+}));
+
+function initHardwareV7(){
+  if(!Array.isArray(db.hardware)||!db.hardware.length){
+    db.hardware=DEFAULT_HARDWARE_V7.map(h=>({...h}));
+  }
+  db.boqHardware=db.boqHardware||[];
+  db.boq=(db.boq||[]).map(i=>{
+    if(i.baseAmount===undefined)i.baseAmount=Math.max(0,(+i.amount||0)-(+i.hardwareTotal||0));
+    i.hardwareTotal=totalHardwareV7(db.boqHardware.filter(h=>h.cabinetId===i.id));
+    i.amount=i.baseAmount+i.hardwareTotal;
+    return i;
+  });
+}
+
+initUsersV6();
+initHardwareV7();
+db.boqHardwareStandalone=db.boqHardwareStandalone||[];
+localStorage.setItem(KEY,JSON.stringify(db));
+applyAccessV6();
+
+window.addEventListener("beforeprint",e=>{
+  if(!printUnlockedV6()){
+    e.preventDefault();
+    alert("Printing is locked until Super Admin approval.");
+  }
+});
+window.addEventListener("keydown",e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="p"&&!printUnlockedV6()){
+    e.preventDefault();alert("Printing is locked until Super Admin approval.");
+  }
+});
+
+db.currency=db.currency||"₹";
+db.boqProjectSearch=db.boqProjectSearch||"";
+db.projectArea=db.projectArea||"";
+db.projects=(db.projects||[]).map(p=>({...p,createdAt:p.createdAt||new Date().toISOString()}));
+db.projectAccounts=Array.isArray(db.projectAccounts)?db.projectAccounts:[];
+db.selectedAccountProjectId=db.selectedAccountProjectId||db.selectedProjectId||db.projects[0]?.id||null;
+ensureProjectAccountsV13();
+renderAll();
+</script>
+<script src="/cloud.js"></script>
+</body>
+</html>
